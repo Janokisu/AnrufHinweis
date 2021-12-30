@@ -11,5 +11,101 @@ body{
 
 </style>
 <body>
+
+<a href="#fritzbox">FritzBox</a>
+<a href="#windows">Windows</a>
+<a href="#linux">Linux</a>
+
+
+<h1 id="fritzbox">FritzBox</h1>
+First of all, some preparations have to be taken on the FritzBox:
+<ul type="disc">
+    <li>To view the call log, the following is needed:
+    <ul type="circle">
+        <li>A user account is needed, which has access to the call list (see <a href="https://en.avm.de/service/knowledge-base/dok/FRITZ-Box-7590-AX/1522_Accessing-FRITZ-Box-from-the-home-network-with-user-accounts/" target="_blank" rel="noreferrer noopener">here</a>)
+        <li>Access for applications via TR-064 must be allowed.
+    </ul>
+    <br>
+    <li>For the CallMonitor, the port 1012 must be enabled on the FritzBox. This can be done by dialing #96*5* by phone. With the number #96*4* you can block it again.
+    <br><br>
+    <li>To be able to dial numbers with the addon, the dialer must be activated (see <a href="https://service.avm.de/help/en/FRITZ-Box-Fon-WLAN-7490/017p1/hilfe_fon_waehlhilfe" target="_blank" rel="noreferrer noopener">here</a>)
+</ul>
+<br>
+<h1 id="windows">Windows</h1>
+In the settings, download the zip file by clicking on "Download files".<br>
+Unzip the zip file to a location of your choice.<br>
+It is best to leave all the files in the one folder. Otherwise, you have to change the paths in the files  accordingly (note different notation).<br>
+<br>
+The cascade runs as follows:<br>
+Firefox ⇒ Registry ⇒ JSON file ⇒ BAT file ⇒ PY file resp.<br>
+Firefox ⇒ Registry ⇒ CallMonitor.json ⇒ CallMonitor_win.bat ⇒ CallMonitor.py<br>
+<br>
+You can find more info here: <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#windows" target="_blank" rel="noreferrer noopener">Native_manifests</a>
+<br>
+<br>
+In the folder, you can find is a file called "RegGenerator.vbs". This file creates a file named "link.reg". <br>
+If you run this reg file, it sets a link to the CallMonitor.json file so that Firefox knows<br>
+where the file is and can use it. Therefore it is important that the VBS file must be in the<br>
+ same folder as the JSON file before running it.<br>
+<br>
+<u>Summary:</u><br>
+<ul>
+    <li>VBS file must be in the same folder as the JSON file
+    <li>Execute VBS file ⇒ Get reg file
+    <li>Execute reg file ⇒ A reference to CallMonitor.json set
+</ul>
+<br>
+<br>
+With the file "CallMonitor_win.bat". you can see if the PY file can be executed.<br>
+Normally, the window should now show "Python started".<br>
+<br>
+If instead a message appears: ""python" is not recognized as an internal or external command [...]" or "Python was not found; run without arguments [...]" Then, the path to python.exe must be <br>
+added to the environment variable. To avoid conflicts, this path should be set to the first position if possible. A user variable should be sufficient.<br>
+Afterwards, the browser should also be restarted to apply the change.<br>
+Alternatively, you can execute the file "set_python_path.bat", which will set the environment variable.
+<br>
+<br>
+<br>
+
+<h1 id="linux">Linux</h1>
+In the settings, download the zip file by clicking on "Download files".<br>
+Unzip the zip file to the folder ~/.mozilla/native-messaging-hosts/<br>
+<br>
+The cascade runs as follows:<br>
+Firefox ⇒ JSON file ⇒ PY file resp.<br>
+Firefox ⇒ CallMonitor.json ⇒ CallMonitor.py<br>
+<br>
+You can find more info here: <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#linux" target="_blank" rel="noreferrer noopener">Native_manifests</a>
+<br>
+<br>
+Now, you have to make a few adjustments to the new files:<br>
+Go to the directory ~/.mozilla/native-messaging-hosts/<br>
+The adjustments can be done by running the "fix.sh" file or you can do it yourself.<br>
+In the "CallMonitor.json" file, the absolute path to "CallMonitor.py" must be specified at "path". (Replace the ~ by the home path, if this is in the same folder as the "CallMonitor.json")<br>
+The "CallMonitor.py" must be made executable (if it isn't already).<br>
+</ul>
+<br>
+<u>Summary:</u><br>
+<ul type="circle">
+    <li>run "fix.sh" or
+</ul>
+<ul type="disc">
+    <li>In "CallMonitor.json" under "path", set the absolute path to the "CallMonitor.py" file
+    <li>Make "CallMonitor.py" executable
+</ul>
+<br>
+<br>
+
+To check whether the PY file works, it is sufficient to run it in the terminal.<br>
+Normally, the window should now say "Python started".<br>
+<p>
+    <br>
+</p>
+<p>
+    <br>
+</p>
+<p>
+    <br>
+</p>
 </body>
 </html>
