@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Anrufhinweis</title>
+<meta charset="utf-8">
+<style>
+/* wegen browser_style: true */
+html, body {
+	user-select: auto;
+}
+
+form{
+    position: relative;
+    top: 5px;
+    left: 5px;
+    height: 650px;
+    width: 550px;
+}
+
+#login_test, #py_test, #router_test, #dial_test{
+    background-color: #FFA500;
+    width: 150px;
+    text-align: center;
+}
+
+input {
+    height: 25px;
+}
+
+td {
+	vertical-align: middle;
+}
+
+[type="checkbox"] {
+	vertical-align: middle;
+}
+</style>
+</head>
+<body>
+<form>
+<div style="display:none">
+    <input type="button" id="test_ring" value="ring">
+    <input type="button" id="test_disc" value="disc">
+    <input type="button" id="test_conn" value="conn">
+    <input type="button" id="test_call" value="call">
+</div>
+
+<table border="0">
+    <tr><td data-i18n="rout_uri"></td><td><input id="rout_uri" type="url" placeholder="Router-url"></td><td id="router_test">???</td><td><input id="test_router" type="button" data-i18n="test_router"></td></tr>
+    <tr><td>&nbsp; </td></tr>
+    <tr><td data-i18n="username"></td><td><input id="username" type="text" placeholder="username" tabindex="1"></td><td id="login_test" rowspan="2">???</td><td rowspan="2"><input id="test_login" type="button" data-i18n="test_login" tabindex="3"></td></tr>
+    <tr><td data-i18n="password"></td><td><input id="password" type="password" placeholder="password" tabindex="2"></td></tr>
+    <tr><td>&nbsp; </td></tr>
+    <tr><td data-i18n="python"></td><td><a href="" data-i18n="download" id="download" download></a><br>
+    <a href="help/help.html" target="_blank" rel="noopener" id="help" data-i18n="help"></a></td><td id="py_test">???</td><td><input id="test_python" type="button" data-i18n="test_python"></td></tr>
+    <tr><td>&nbsp; </td></tr>
+    <tr><td data-i18n="dial"></td><td></td><td id="dial_test">???</td><td><input id="test_dial" type="button" data-i18n="test_dial"></td></tr>
+    <tr><td>&nbsp; </td></tr>
+    <tr><td data-i18n="sound_volume"></td><td><input id="alarm_volume_range" type="range" min="0" max="100" value="100" style="width:200px"></td><td id="alarm_volume_view" style="text-align:center">???</td><td><input id="test_alarm" type="button" value="▶"></td></tr>
+    <tr><td>&nbsp; </td></tr>
+    <tr><td colspan="2"><input type="checkbox" id="benach"><label for="benach" data-i18n="tel_bena"></label></td></tr>
+    <tr><td colspan="2"><input type="checkbox" id="vpasst"><label for="vpasst" data-i18n="bena_verpa"></label></td></tr>
+    <tr><td colspan="2"><input type="checkbox" id="pbook"><label for="pbook" data-i18n="tel_stat_num"></label></td></tr>
+	<tr><td colspan="2"><input type="checkbox" id="contmenu"><label for="contmenu" data-i18n="lang_contmenu"></label></td></tr>
+</table> 
+<br>
+
+
+<br>
+<details>
+    <summary><span data-i18n="erw_sett"></span></summary>
+    <div style="position:relative; left:20px; top:10px">
+        <fieldset style="width:470px">
+            <legend data-i18n="num_eing"></legend>
+            <table border="0">
+                <tr><td rowspan="3"><textarea id="nummer_liste" rows="3" style="resize: none;"></textarea></td><td style="vertical-align: text-top;"><input id="in_num" type="button" data-i18n="num_abf"></td></tr>
+                <tr>                                                                                        <td><span id="in_num_error"></span></td></tr>
+            </table>
+            <input type="checkbox" id="nummer_reagieren"> <label for="nummer_reagieren" data-i18n="nummer_reagieren"></label><br>
+            <input type="checkbox" id="nummer_anzeigen"> <label for="nummer_anzeigen" data-i18n="nummer_anzeigen"></label>
+        </fieldset>
+       <input type="checkbox" id="ange_nummer_anzeigen"> <label for="ange_nummer_anzeigen" data-i18n="ange_nummer_anzeigen"></label><br>
+    </div>
+    <br>
+</details>
+
+
+<br>
+
+<input id="save" type="button" data-i18n="save">
+</form>
+</body>
+<script src="tools.js"></script>
+<script src="options.js"></script>
+<!-- <script src="test.js"></script> //-->
+</html>

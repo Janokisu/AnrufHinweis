@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Anrufliste</title>
+<meta charset="utf-8">
+<style>
+/* wegen browser_style: true */
+html, body {
+	user-select: auto;
+}
+
+
+body{
+	width: 492px;
+    height: 150px;
+}
+
+#settings_link {
+    cursor: pointer;
+}
+
+#Anrufliste th:nth-child(1), #Anrufliste td:nth-child(1) { width: 60px}
+#Anrufliste th:nth-child(2), #Anrufliste td:nth-child(2) { width: 220px}
+#Anrufliste th:nth-child(3), #Anrufliste td:nth-child(3) { width: 60px}
+#Anrufliste th:nth-child(4), #Anrufliste td:nth-child(4) { width: 100px}
+
+
+#Telefonbuch th:nth-child(1), #Telefonbuch td:nth-child(1) { width: 220px}
+#Telefonbuch th:nth-child(2), #Telefonbuch td:nth-child(2) { width: 42px}
+#Telefonbuch td:nth-child(2) { text-align: right}
+#Telefonbuch th:nth-child(3), #Telefonbuch td:nth-child(3) { width: 180px}
+
+tbody tr:nth-child(n) {
+    background-color: #FFE37F;
+}
+
+tbody tr:nth-child(2n) {
+    background-color: #FFEEB1;
+}
+
+thead th:nth-child(-n+4) {
+    background-color: #FFE37F;
+}
+
+
+.link_font{
+	color: blue;
+	cursor: pointer;
+	text-decoration: underline
+}
+
+
+thead { 
+    display: block;
+}
+
+tbody {
+    height: 120px;
+	display: block;
+    overflow-y: scroll;
+}
+
+
+#buch, #sonder{
+	flex-grow: 1;
+	overflow:auto;	
+	display: flex;
+}
+
+
+.register {
+	width: 20px;
+	display: flex;
+	flex-flow: column nowrap; /* Spaltenweise */
+}
+
+
+#Register_Anruf, #Register_Telefonbuch {
+	writing-mode: vertical-lr; 
+	flex-grow: 1;
+	display:table-cell;
+	text-align:center;
+	vertical-align:middle;
+	border-bottom: 1px solid gray;
+}
+
+#Register_Anruf {
+	border-top-left-radius: 5px;
+	background-color:#fff;
+}
+
+#Register_Telefonbuch {
+	background-color:#eee;
+}
+
+#Register_Telefon {
+	border-bottom-left-radius: 5px;
+	background-color:#eee;
+	text-align: center;
+}
+
+
+
+.main_table{
+	
+	flex-grow: 1; 
+	overflow:auto;
+
+	display:flex;
+}
+
+
+.d_table {
+	display:inline-table;
+	flex-grow: 1;
+}
+
+.d_cell {
+	display:table-cell;
+	text-align:center;
+	vertical-align:middle;
+}
+
+#refresh_phonebook {
+	position:absolute;
+	right:30px;
+	top:-4px;
+	color: green;
+	font-size: 20px;
+	font-weight: bold;
+	cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div id='settings_link' style="position:absolute; right:3px; top:3px">🔧</div>
+
+
+<div id="buch">
+	<div class="register">
+		<div id="Register_Anruf" data-i18n="pop_callist"></div>
+		<div id="Register_Telefonbuch" data-i18n="pop_phoneboock"></div>
+		<div id="Register_Telefon">☎</div>
+	</div>
+	<div class="main_table">
+		<div id="Anrufliste">
+			<table>
+				<thead>
+					<tr>
+						<th data-i18n="pop_status"></th>
+						<th data-i18n="pop_number"></th>
+						<th data-i18n="pop_time"></th>
+						<th data-i18n="pop_date"></th>
+					</tr>
+				</thead>
+				<tbody id="calllist"></tbody>
+			</table>
+		</div>
+		<div id="Telefonbuch" style="display:none">
+			<table>
+				<thead>
+					<tr>
+						<div id="refresh_phonebook">⟳</div>
+						<th data-i18n="pop_name"></th>
+						<th data-i18n="pop_type"></th>
+						<th data-i18n="pop_number"></th>
+					</tr>
+				</thead>
+				<tbody id="phonelist"></tbody>
+			</table>
+		</div>
+		<div id="Telefon" class="d_table" style="display:none">
+			<div class="d_cell">
+				<input type="text" id="telNumberEnter" placeholder="Phone number"> <button id="telNumberEnterCall"><span style="color:green; font-size:15px">✆</span></button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="sonder" style="display:none;">
+	<div id="Anrufen" class="d_table">
+		<div class="d_cell">
+			<span id="askNumberText"></span><br>
+			<input type="button" id="yes" data-i18n="pop_dial">
+			<input type="button" id="no" data-i18n="pop_cancel">
+		</div>
+	</div>
+	<div id="Anruf" class="d_table" style="display:none;">
+		<div class="d_cell">
+			<span id="callingNumberText"></span><br>
+			<span style="color:green">☎</span> <span id="wait" style="display:inline-block; width:50px; text-align:left;"></span> <button id="hangup"><font color="red">☎</font></button><br>
+			<span id="aufbauTimout" style="display:none; color:red" data-i18n="pop_connectTimeout"></span><br>
+		</div>
+	</div>
+	<div id="DialError" class="d_table" style="display:none;">
+		<div class="d_cell">
+			<span data-i18n="pop_dialError"></span>
+		</div>
+	</div>
+	
+	<div style="display:none;">
+		<span id="callingNumber"></span>
+		<span id="callingName"></span>
+	<div>
+</div>
+</body>
+<script src="tools.js" defer></script>
+<script src="popup.js" defer></script>
+</html>

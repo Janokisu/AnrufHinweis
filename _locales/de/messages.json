@@ -1,0 +1,568 @@
+{
+    // -------------- manifest.json -------------------
+    
+    "extensionName": {
+        "message": "Anruf Hinweis",
+        "description": ""
+    },
+    
+    "extensionDescription": {
+        "message": "Zeigt Anrufe und Telefonbuch der FritzBox an, kann Anrufe starten",
+        "description": ""
+    },
+    
+    // -------------- options.html -------------------
+    
+    "rout_uri": {
+        "message": "Router-Url",
+        "description": ""
+    },
+    
+    "username": {
+        "message": "Name",
+        "description": ""
+    },
+    
+    "password": {
+        "message": "Passwort",
+        "description": ""
+    },
+    
+    "python": {
+        "message": "Python",
+        "description": ""
+    },
+    
+	"dial": {
+        "message": "Wählhilfe",
+        "description": ""
+    },
+	
+    "download": {
+        "message": "Dateien downloaden",
+        "description": ""
+    },
+    
+    "help": {
+        "message": "Hilfe",
+        "description": ""
+    },
+    
+    "test_router": {
+        "message": "Test",
+        "description": ""
+    },
+    
+    "test_login": {
+        "message": "Test",
+        "description": ""
+    },
+    
+    "test_python": {
+        "message": "Test",
+        "description": ""
+    },
+    
+	"test_dial": {
+        "message": "Test",
+        "description": ""
+    },
+    
+	
+    "sound_volume": {
+        "message": "Soundlautstärke",
+        "description": ""
+    },
+    
+    "tel_bena": {
+        "message": "Textbenachrichtigung bei Anruf",
+        "description": ""
+    },
+    
+    "bena_verpa": {
+        "message": "Benachrichtigung bei verpassten Anrufen",
+        "description": ""
+    },
+    
+    "tel_stat_num": {
+        "message": "Telefonbucheinträge statt Nummer anzeigen (falls vorhanden)",
+        "description": ""
+    },
+    
+    "erw_sett": {
+        "message": "Erweiterte Einstellungen",
+        "description": ""
+    },
+    
+    "num_eing": {
+        "message": "Zu benutzende eigene Nummern eingrenzen",
+        "description": ""
+    },
+    
+    "num_abf": {
+        "message": "Eigene Nummer(n) abfragen",
+        "description": ""
+    },
+    
+    "nummer_reagieren": {
+        "message": "Nur bei den angegebene(n) Nummer(n) reagieren",
+        "description": ""
+    },
+    
+    "nummer_anzeigen": {
+        "message": "Nur Anrufe für die angegebene(n) Nummer(n) in der Anrufliste anzeigen",
+        "description": ""
+    },
+    
+    "ange_nummer_anzeigen": {
+        "message": "Angerufene Nummer in Benachrichtigung anzeigen",
+        "description": ""
+    },
+    
+    "save": {
+        "message": "Speichern",
+        "description": ""
+    },
+	
+	"lang_contmenu": {
+        "message": "Kontextmenü",
+        "description": ""
+    },
+
+    // -------------- options.js -------------- 
+    
+    "ben_fehl": {
+        "message": "Benutzername fehlt",
+        "description": ""
+    },
+    
+    "send_fbox": {
+        "message": "Sende Anmeldedaten an FritzBox...",
+        "description": ""
+    },
+    
+    "verb_aufbau": {
+        "message": "Verbindung wird aufgebaut...",
+        "description": ""
+    },
+    
+    "login_ok": {
+        "message": "Login erfolgreich",
+        "description": ""
+    },
+    
+    "login 401": {
+        "message": "Login fehlgeschlagen.\nFalsche Zugangsdaten",
+        "description": ""
+    },
+    
+    "login error": {
+        "message": "Login fehlgeschlagen.\n$error$",
+        "description": "Teilt dem Benutzer mit, welcher Loginfehler aufgetreten ist",
+        "placeholders": {
+            "error" : {
+                "content" : "$1"
+            }
+        }
+    },
+    
+    "py_verb": {
+        "message": "Verbinde zur Pythondatei...",
+        "description": ""
+    },
+    
+    "py_error": {
+        "message": "Überprüfe evtl. nochmal die Hilfeseite.\nBeachte ggf. die unterschiedlichen Schreibweisen.\n$error$",
+        "description": "",
+        "placeholders": {
+            "error" : {
+                "content" : "$1"
+            }
+        }
+    },
+    
+    "testsignal": {
+        "message": "Sende Testsignal",
+        "description": ""
+    },
+    
+    "test_CallMon": {
+        "message": "Teste CallMon",
+        "description": ""
+    },
+    
+    "CallMon_port_error": {
+        "message": "Falsche URL oder der Portzugang wurde verweigert. Wurde der Port durch die Nummer #96*5* schon freigeshaltet?",
+        "description": ""
+    },
+    
+    "CallMon_aktiv": {
+        "message": "Pythonversion: $py_version$\nCallMon ist einsatzbereit :)",
+        "description": "",
+        "placeholders": {
+            "py_version" : {
+                "content" : "$1"
+            }
+        }
+    },
+    
+    "no_signal": {
+        "message": "Es kam kein Siganl zurück :(",
+        "description": ""
+    },
+    
+    "router_verb": {
+        "message": "Verbindung wird aufgebaut",
+        "description": ""
+    },
+    
+    "router_error": {
+        "message": "Keine Verbindung zu '$url$/cgi-bin/system_stats' möglich!\n\n$error$",
+        "description": "",
+        "placeholders": {
+            "url" : {
+                "content" : "$1",
+                "example" : "http://fritz.box"
+            },
+            "error" : {
+                "content" : "$2"
+            }
+        }
+    },
+    
+    "keine_http_rechte": {
+        "message": "Der Zugriff auf alle Webseiten wurde entfernt.\nFühre zur Sicherheit erneut einen Verbindungstest durch",
+        "description": ""
+    },
+    
+    "erl_verw": {
+        "message": "Erlaubnis verweigert",
+        "description": ""
+    },
+    
+    "first_logintest": {
+        "message": "Zuerst erfolgreichen \nLogin-Test durchführen",
+        "description": ""
+    },
+    
+    // -------------- popup.html -------------- 
+    
+	"pop_callist": {
+        "message": "Anrufliste",
+        "description": ""
+    },
+	
+	"pop_phoneboock": {
+        "message": "Telefonbuch",
+        "description": ""
+    },
+	
+    "pop_status": {
+        "message": "Status",
+        "description": ""
+    },
+    
+    "pop_number": {
+        "message": "Nummer",
+        "description": ""
+    },
+	
+	"pop_name": {
+        "message": "Name",
+        "description": ""
+    },
+	
+	"pop_type": {
+        "message": "Typ",
+        "description": ""
+    },
+    
+    "pop_time": {
+        "message": "Dauer",
+        "description": ""
+    },
+    
+    "pop_date": {
+        "message": "Datum",
+        "description": ""
+    },
+	
+	"pop_dial": {
+        "message": "Wählen",
+        "description": ""
+    },
+	
+	"pop_cancel": {
+        "message": "Abbrechen",
+        "description": ""
+    },
+	
+	"pop_dialError": {
+        "message": "Wählhilfe ist nicht konfiguriert und kann daher keine Verbindung aufbauen. Falls du zum einrichten Hilfe benötigen, kannst du dies in der Hilfe nachlesen.",
+        "description": ""
+    },
+	
+    // -------------- popup.js -------------- 
+    
+	"pop_askNumberText_Number": {
+        "message": "Willst du die Nummer $number$ anrufen?",
+        "description": "",
+        "placeholders": {
+            "number" : {
+                "content" : "$1"
+            }
+        }
+    },
+    
+	"pop_askNumberText_Name": {
+        "message": "Willst du '$name$' ($number$) anrufen?",
+        "description": "",
+        "placeholders": {
+            "number" : {
+                "content" : "$1"
+            },
+			"name" : {
+                "content" : "$2"
+            }
+        }
+    },
+	
+	"pop_callingNumberText_Number": {
+        "message": "Nummer $number$ wird angerufen",
+        "description": "",
+        "placeholders": {
+            "number" : {
+                "content" : "$1"
+            }
+        }
+    },
+    
+    "pop_callingNumberText_Name": {
+        "message": "'$name$' ($number$) wird angerufen",
+        "description": "",
+        "placeholders": {
+            "number" : {
+                "content" : "$1"
+            },
+			"name" : {
+                "content" : "$2"
+            }
+        }
+    },
+    
+    "pop_connectingNumberText_Number": {
+        "message": "Verbindung zur Nummer $number$ wird aufgebaut",
+        "description": "",
+        "placeholders": {
+            "number" : {
+                "content" : "$1"
+            }
+        }
+    },
+    
+    "pop_connectingNumberText_Name": {
+        "message": "Verbindung zu '$name$' ($number$) wird aufgebaut",
+        "description": "",
+        "placeholders": {
+            "number" : {
+                "content" : "$1"
+            },
+			"name" : {
+                "content" : "$2"
+            }
+        }
+    },
+	
+    "no_data": {
+        "message": "Keine Daten vorhanden<br><br>Entwerder sind in der Fritzbox keine Einträge vorhanden oder es wurden keine/falsche Zugangsdaten eingegeben.<br><br>Evtl. noch einmal die $link_start$Einstellungen überprüfen$link_end$ und testen.",
+        "description": "",
+        "placeholders": {
+            "link_start" : {
+                "content" : "<a href='#' id='noData'>"
+            },
+            "link_end" : {
+                "content" : "</a>"
+            }
+        }
+    },
+	
+    "pop_loading": {
+        "message": "Lade...",
+        "description": ""
+    },
+    
+    "telNumberEnter": {
+        "message": "Telefonnummer",
+        "description": ""
+    },
+	
+    "pop_connectTimeout": {
+        "message": "Der Verbindungsaufbau dauert ungewöhnlich lange.\nIst die Nummer korrekt angegeben?",
+        "description": ""
+    },
+    
+    
+    // -------------- background -------------- 
+    
+    "py_setting_erro": {
+        "message": "Mit der Pythondatei oder der Zuweisung stimmt möglicherweise etwas nicht!\n$error$",
+        "description": "",
+        "placeholders": {
+            "error" : {
+                "content" : "$1"
+            }
+        }
+    },
+    
+    "ring_extra": {
+        "message": " auf der Nummer $target$",
+        "description": "[] oder [auf der Nummer xy]",
+        "placeholders": {
+            "target" : {
+                "content" : "$1"
+            }
+        }
+    },
+    
+    "ring_text": {
+        "message": "$caller$ ruft$extra$ an",
+        "description": "",
+        "placeholders": {
+            "caller" : {
+                "content" : "$1"
+            },
+            "extra" : {
+                "content" : "$2"
+            }
+        }
+    },
+    
+    "connect_extra": {
+        "message": " auf der Nummer $target$",
+        "description": "[] oder [auf der Nummer xy]",
+        "placeholders": {
+            "target" : {
+                "content" : "$1"
+            }
+        }
+    },
+    
+    "connect_text": {
+        "message": "Du bist mit $caller$$extra$ verbunden",
+        "description": "",
+        "placeholders": {
+            "caller" : {
+                "content" : "$1"
+            },
+            "extra" : {
+                "content" : "$2"
+            }
+        }
+    },
+    
+    "disconnect_extra": {
+        "message": " auf der Nummer $target$",
+        "description": "[] oder [auf der Nummer xy]",
+        "placeholders": {
+            "target" : {
+                "content" : "$1"
+            }
+        }
+    },
+    
+    "disconnect_text": {
+        "message": "Der Anruf$extra$ wurde beendet\n$time$",
+        "description": "",
+        "placeholders": {
+            "time" : {
+                "content" : "$1"
+            },
+            "extra" : {
+                "content" : "$2"
+            }
+        }
+    },
+    
+    "con_typ_on": {
+        "message": "$start$☎←$end$",
+        "description": "Eingehender Anruf",
+        "placeholders": {
+            "start" : {
+                "content" : "<font color='blue'>"
+            },
+            "end" : {
+                "content" : "</font>"
+            }
+        }
+    },
+    
+    "con_typ_missed": {
+        "message": "$start$😨$end$",
+        "description": "Verpasster Anruf",
+        "placeholders": {
+            "start" : {
+                "content" : "<font color=''>"
+            },
+            "end" : {
+                "content" : "</font>"
+            }
+        }
+    },
+    
+    "con_typ_call": {
+        "message": "$start$☎→$end$",
+        "description": "Ausgehender Anruf",
+        "placeholders": {
+            "start" : {
+                "content" : "<font color='green'>"
+            },
+            "end" : {
+                "content" : "</font>"
+            }
+        }
+    },
+    
+    "con_typ_block": {
+        "message": "$start$X$end$",
+        "description": "Geblockter eingehender Anruf",
+        "placeholders": {
+            "start" : {
+                "content" : "<font color='red'>"
+            },
+            "end" : {
+                "content" : "</font>"
+            }
+        }
+    },
+    
+    "note_title": {
+        "message": "Anruf!",
+        "description": ""
+    },
+    
+    "caller_verb": {
+        "message": "Anonym",
+        "description": "Eingehende Nummer unterdrückt"
+    },
+    
+    "call_selection_number": {
+        "message": "'$number$' anrufen ...",
+        "description": "",
+        "placeholders": {
+            "number" : {
+                "content" : "$1"
+            }
+        }
+    },
+    
+    "nicht_da": {
+        "message": "Jemand hat versucht, dich zu erreichen",
+        "description": "Hinweis auf verpasste Anrufe"
+    },
+    // -------------- reserve -------------- 
+    
+    "": {
+        "message": "",
+        "description": ""
+    }
+}
