@@ -663,6 +663,7 @@ function blink_missed(x){
     
     if(x != ""){
         if(x == "on"){
+            clearInterval(blink_missed_interval);
             blink_missed_interval = setInterval(() => {
                 blink_missed();
             }, 1000);
@@ -693,6 +694,7 @@ function blink_connecting(x){
     
     if(x != ""){
         if(x == "on"){
+            clearInterval(blink_connecting_interval);
             blink_connecting_interval = setInterval(() => {
                 blink_connecting();
             }, 1000);
