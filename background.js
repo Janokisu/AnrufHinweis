@@ -971,6 +971,7 @@ function prepareViewCallList(request){
     if(GL_modi_check == false){
         //GL_modi_check = true;
         if(GL_verpa_anz == true && GL_modi > -1 && GL_modi < tmp){
+            GL_modi = tmp;
             note( browser.i18n.getMessage("nicht_da") )
             blink_missed("on");
         }
