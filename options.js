@@ -97,12 +97,28 @@ function login_test(i = 0){
                 //console.warn("getLuaUrl", request.statusText, request.responseText);
                 login_test(1);
             } else if (request.status == 401) {
-                console.warn("getLuaUrl", request.statusText, request.responseText);
+                console.warn("getLuaUrl: ", request.statusText, request.responseText);
                 lo_test.innerText = browser.i18n.getMessage("login 401");
                 lo_test.style.background = red;
                 GL_login = false;
+            } else if (request.status == 500) {
+                GL_login = false;
+                lo_test.style.background = red;
+                console.warn("getLuaUrl: ", request.statusText, request.responseText);
+                
+                let errorCode = request.responseXML.getElementsByTagName("errorCode")[0].firstChild.data;
+                switch(errorCode){
+                  case "401":
+                    lo_test.innerText = browser.i18n.getMessage("fbox 401");
+                    break;
+                  case "606":
+                    lo_test.innerText = browser.i18n.getMessage("fbox 606");
+                    break;
+                  default:
+                    lo_test.innerText = browser.i18n.getMessage("Fritz!Box error: ", request.statusText + request.responseText);
+                    break;
             } else {
-                console.warn("getLuaUrl", request.statusText, request.responseText);
+                console.warn("getLuaUrl: ", request.statusText, request.responseText);
                 lo_test.innerText = browser.i18n.getMessage("login error", request.statusText + request.responseText);
                 lo_test.style.background = red;
                 GL_login = false;
