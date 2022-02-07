@@ -166,6 +166,16 @@
         }
     },
     
+    "fbox 401": {
+        "message": "Fritz!Box: TR-064 ist womöglich nicht aktiviert. S. dazu in der Hilfe nach",
+        "description": ""
+    },
+    
+    "fbox 606": {
+        "message": "Fritz!Box: Dem Benutzer fehlen womöglich die nötigen Rechte. S. dazu in der Hilfe nach",
+        "description": ""
+    },
+    
     "py_verb": {
         "message": "Verbinde zur Pythondatei...",
         "description": ""
@@ -401,7 +411,20 @@
         "description": ""
     },
     
+    "pop_telError_+Anfang": {
+        "message": "Das '+' darf nur am Anfang der Telefonnummer stehen",
+        "description": ""
+    },  
     
+    "pop_telError_nur1+": {
+        "message": "In der Telefonnummer darf das '+' nur 1 mal vorkommen",
+        "description": ""
+    }, 
+    
+    "pop_telError_klammerOffen": {
+        "message": "Eine Klammer ist noch offen",
+        "description": ""
+    },    
     // -------------- background -------------- 
     
     "py_setting_erro": {
