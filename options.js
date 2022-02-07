@@ -550,6 +550,7 @@ function init(x){
 			help_link.href = "help/help_" + lang + ".html";
 		} 
         
+        help_link.title = browser.i18n.getMessage( "help" )
         
         if(navigator.platform.indexOf("Win") > -1){
             //Windows
