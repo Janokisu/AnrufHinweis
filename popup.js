@@ -123,15 +123,63 @@ document.getElementById("no").addEventListener("click", function(x){
 document.getElementById("telNumberEnterCall").addEventListener("click", function(x){
 	//wenn der Button "✆" geklickt wurde -> wähle die angezeigte Nummer
 	
-	let nummer = document.getElementById("telNumberEnter").value.replace(/[^0-9+*]/g, "")
+	let nummer = document.getElementById("telNumberEnter").value.replace(/[^0-9()+*]/g, "")
 	
-	if (nummer != ""){
-		askCallingNumber(nummer)
-
-		browser.runtime.sendMessage({
-			"Call_Number": callingNumber.innerText
-		}).then(connecting, onError);
+	//leere Klammer entfernen
+	nummer = nummer.replace("()", "");
+	
+	if(nummer == ""){
+		//Abbrechen, wenn der String leer ist 
+		return 0;
 	}
+	
+	//wenn "+" vorhanden ist
+	if(nummer.indexOf("+") > -1){
+		if(nummer.indexOf("+") > 0){
+			//Abbrechen, wenn "+" nicht an 1. Stelle steht & Fehlermeldung
+			document.getElementById("telError").innerText = browser.i18n.getMessage("pop_telError_+Anfang");
+			return 1;
+		}
+		
+		if(nummer.match(/[+]/g).length > 1){
+			//Abbrechen, wenn mehr als ein "+" vorhanden sind & Fehlermeldung
+			document.getElementById("telError").innerText = browser.i18n.getMessage("pop_telError_nur1+");
+			return 1;
+		}
+	}
+	
+	
+	
+	
+	let KA = nummer.indexOf("(");
+	let KB = nummer.indexOf(")")
+	
+	// wenn "(" oder ")" vorhanden ist
+	if(KA > -1 || KB > -1){
+		//sind beide Klammern vorhanden?
+		if(KA > -1 && KB > -1){
+			if(KA <= 1){
+				//wenn die Klammer am Anfang steht, dann kann man die Klammern auflösen
+				nummer = nummer.replace(/[()]/g, "");
+			}
+			else{
+				//wenn die Klammer in der Zahl steht, muss die Klammer und dessen Inhalt entfernt werden
+				nummer = nummer.slice( 0, KA ) + nummer.slice( KB+1 )
+			}
+		}
+		else{
+			//Abbrechen, wenn nur eine Klammer vorhanden ist & Fehlermeldung
+			document.getElementById("telError").innerText = browser.i18n.getMessage("pop_telError_klammerOffen");
+			return 1;
+		}
+	}
+	
+
+	askCallingNumber(nummer)
+
+	browser.runtime.sendMessage({
+		"Call_Number": callingNumber.innerText
+	}).then(connecting, onError);
 });
 
 
