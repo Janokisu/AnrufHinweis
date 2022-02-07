@@ -210,7 +210,7 @@ global_contexMenu = {
 	onclick(info, tab){
 		//console.log(info.selectionText);
 		
-		let telNumber = info.selectionText.split("\n")[0].replace(/[^0-9+*]/g, "")
+		let telNumber = info.selectionText.split("\n")[0].replace(/[^0-9()+*]/g, "")
 		//console.log(telNumber);
 		
 		Listener_SelectionNumber = telNumber;
