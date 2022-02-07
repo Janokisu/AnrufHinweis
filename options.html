@@ -11,7 +11,7 @@ html, body {
 
 form{
     position: relative;
-    top: 5px;
+    top: 30px;
     left: 5px;
     height: 650px;
     width: 550px;
@@ -34,9 +34,35 @@ td {
 [type="checkbox"] {
 	vertical-align: middle;
 }
+
+#help{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  
+  text-align:center;
+  
+  /*Form*/
+  width: 20px;
+  height: 20px;
+  display: table-cell;
+  border-radius: 15px;
+  
+  /*Farben*/
+  border: 2px solid #fff;
+  box-shadow:1px 1px 1px 1px #444;
+  Background-Color: #3c3;
+
+  /*Text*/
+  color: #fff;
+  font-family: "Liberation Sans", arial;
+  text-decoration: none; /*Unterstrich entfernen*/
+}
+
 </style>
 </head>
 <body>
+<a href="help/help.html" target="_blank" rel="noopener" id="help">?</a>
 <form>
 <div style="display:none">
     <input type="button" id="test_ring" value="ring">
@@ -51,8 +77,7 @@ td {
     <tr><td data-i18n="username"></td><td><input id="username" type="text" placeholder="username" tabindex="1"></td><td id="login_test" rowspan="2">???</td><td rowspan="2"><input id="test_login" type="button" data-i18n="test_login" tabindex="3"></td></tr>
     <tr><td data-i18n="password"></td><td><input id="password" type="password" placeholder="password" tabindex="2"></td></tr>
     <tr><td>&nbsp; </td></tr>
-    <tr><td data-i18n="python"></td><td><a href="" target="_blank" rel="noopener" data-i18n="download" id="download"></a><br>
-    <a href="help/help.html" target="_blank" rel="noopener" id="help" data-i18n="help"></a></td><td id="py_test">???</td><td><input id="test_python" type="button" data-i18n="test_python"></td></tr>
+    <tr><td data-i18n="python"></td><td><a href="" target="_blank" rel="noopener" data-i18n="download" id="download"></a></td><td id="py_test">???</td><td><input id="test_python" type="button" data-i18n="test_python"></td></tr>
     <tr><td>&nbsp; </td></tr>
     <tr><td data-i18n="dial"></td><td></td><td id="dial_test">???</td><td><input id="test_dial" type="button" data-i18n="test_dial"></td></tr>
     <tr><td>&nbsp; </td></tr>
