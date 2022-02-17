@@ -166,6 +166,16 @@
         }
     },
 
+    "fbox 401": {
+        "message": "Fritz!Box: Maybe TR-064 is not enabled. Please note the help.",
+        "description": ""
+    },
+
+    "fbox 606": {
+        "message": "Fritz!Box: The user may not have the necessary rights. Please note the help.",
+        "description": ""
+    },
+
     "py_verb": {
         "message": "Connecting to Python file...",
         "description": ""
@@ -400,6 +410,21 @@
         "message": "Establishing a connection takes an unusually long time.\nIs the number correct?",
         "description": ""
     },
+
+    "pop_telError_+Anfang": {
+        "message": "The '+' may only appear at the beginning of the phone number",
+        "description": ""
+    },  
+
+    "pop_telError_nur1+": {
+        "message": "The '+' may only occur once in the phone number",
+        "description": ""
+    }, 
+
+    "pop_telError_klammerOffen": {
+        "message": "A bracket is still open",
+        "description": ""
+    }, 
 
 
     // -------------- background --------------
