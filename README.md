@@ -34,5 +34,27 @@ Um über ankommende Anrufe benachrichtigt zu werden, ist Python auf dem PC erfor
 	</li>
 </ul>
 
-</br></br></br>
+</br><p>
 Zum Addon: https://addons.mozilla.org/de/firefox/addon/anrufhinweis/
+</p></br>
+<h4>Changelog:</h4>
+
+<h5>0.2.0</h5>
+
+- Hilfe-Seite (https://github.com/Janokisu/AnrufHinweis/issues/2) und den Link dazu bearbeitet (der Link ist jetzt ein ?-Symbol)
+- Tel-Links könen nun benutzt werden (https://github.com/Janokisu/AnrufHinweis/issues/4)
+- Anrufliste und Telefonbuch können durchsucht werden
+- Verbindungstest und Aufbau mit CallMon sowie dessen Zustandsanzeige geht jetzt schneller durch
+
+<h5>0.1.2</h5>
+
+- Meldung zu "Anruf in Abwesenheit" erschien jede Stunde, wenn mal ein "Anruf in Abwesenheit" war</br>
+
+<h5>0.1.1</h5>
+
+- Firefox konnte nicht mit dem Python-Script kommunizieren</br>
+- Hinweissymbol blinkte bei jeden verpassten Anruf schneller</br>
+
+<h5>0.1.0</h5>
+
+- Erstveröffentlichung
