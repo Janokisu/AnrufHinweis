@@ -1,0 +1,7 @@
+{
+  "name": "CallMonitor",
+  "description": "Listen on FritzBox for calls",
+  "path": ".\\CallMonitor_win.bat",
+  "type": "stdio",
+  "allowed_extensions": [ "{259559e5-2391-4a38-aa74-a19e732c84e8}" ]
+}
