@@ -123,12 +123,17 @@
         "message": "Speichern",
         "description": ""
     },
-	
-	"lang_contmenu": {
+    
+    "lang_contmenu": {
         "message": "Kontextmenü",
         "description": ""
     },
-
+    
+    "lang_telLink_offnen": {
+        "message": "Telefonnummer-Links nur mit diesem Addon öffnen",
+        "description": ""
+    },
+    
     // -------------- options.js -------------- 
     
     "ben_fehl": {
@@ -191,11 +196,6 @@
         }
     },
     
-    "testsignal": {
-        "message": "Sende Testsignal",
-        "description": ""
-    },
-    
     "test_CallMon": {
         "message": "Teste CallMon",
         "description": ""
@@ -206,19 +206,35 @@
         "description": ""
     },
     
+    "CallMon_gai_error": {
+        "message": "Ist evtl. die Verbindung zur FritzBox unterbrochen?",
+        "description": ""
+    },
+    
     "CallMon_aktiv": {
-        "message": "Pythonversion: $py_version$\nCallMon ist einsatzbereit :)",
+        "message": "Pythonversion: $py_version$\nCallMonVerison: $CallMon_version$",
         "description": "",
         "placeholders": {
             "py_version" : {
                 "content" : "$1"
+            },
+            "CallMon_version" : {
+                "content" : "$2"
             }
         }
     },
     
-    "no_signal": {
-        "message": "Es kam kein Siganl zurück :(",
-        "description": ""
+    "CallMon_alt": {
+        "message": "Sie sollten evtl. Ihre 'CallMonitor.py'-Datei erneuern\n\nBenötigte Version: $erwartete_version$\nIn Benutzung: $benutzte_version$",
+        "description": "",
+        "placeholders": {
+            "erwartete_version" : {
+                "content" : "$1"
+            },
+            "benutzte_version" : {
+                "content" : "$2"
+            }
+        }
     },
     
     "router_verb": {
@@ -254,6 +270,13 @@
         "message": "Zuerst erfolgreichen \nLogin-Test durchführen",
         "description": ""
     },
+    
+    "sonstige_fehler": {
+        "message": "Fehler",
+        "description": ""
+    },
+    
+    
     
     // -------------- popup.html -------------- 
     
@@ -424,7 +447,18 @@
     "pop_telError_klammerOffen": {
         "message": "Eine Klammer ist noch offen",
         "description": ""
-    },    
+    }, 
+    
+    "title_such": {
+        "message": "Durchsuchen",
+        "description": ""
+    }, 
+    
+    "title_einstellung": {
+        "message": "Einstellungen",
+        "description": ""
+    }, 
+    
     // -------------- background -------------- 
     
     "py_setting_erro": {

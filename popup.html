@@ -121,12 +121,12 @@ tbody {
 	vertical-align:middle;
 }
 
-#refresh_phonebook {
+#Eintrag_suchen {
 	position:absolute;
 	right:30px;
-	top:-4px;
+	top:2px;
 	color: green;
-	font-size: 20px;
+	font-size: 15px;
 	font-weight: bold;
 	cursor:pointer;
 }
@@ -134,6 +134,19 @@ tbody {
 #telError{
 	color: red;
 }
+
+
+
+#Eintrag_suchen_text{
+	opacity: 0.3;
+  color: red;
+}
+
+#Eintrag_suchen_text:hover, #Eintrag_suchen_text:focus{
+	opacity: 1;
+  color: black;
+}
+
 </style>
 </head>
 <body>
@@ -148,11 +161,17 @@ tbody {
 		<div id="Register_Telefon">☎</div>
 	</div>
 	<div class="main_table">
+    
+    <div id="Eintrag_suchen">
+      <input id="Eintrag_suchen_text" type="text" style="display:none">
+      <span id="Eintrag_suchen_icon">🔍</span>
+    </div>
+    
 		<div id="Anrufliste">
 			<table>
 				<thead>
 					<tr>
-						<th data-i18n="pop_status"></th>
+            <th data-i18n="pop_status"></th>
 						<th data-i18n="pop_number"></th>
 						<th data-i18n="pop_time"></th>
 						<th data-i18n="pop_date"></th>
@@ -165,7 +184,6 @@ tbody {
 			<table>
 				<thead>
 					<tr>
-						<div id="refresh_phonebook">⟳</div>
 						<th data-i18n="pop_name"></th>
 						<th data-i18n="pop_type"></th>
 						<th data-i18n="pop_number"></th>
@@ -176,7 +194,7 @@ tbody {
 		</div>
 		<div id="Telefon" class="d_table" style="display:none">
 			<div class="d_cell">
-				<input type="text" id="telNumberEnter" placeholder="Phone number"> <button id="telNumberEnterCall"><span style="color:green; font-size:15px">✆</span></button>
+				<input type="text" id="telNumberEnter" placeholder="Phone number"> <button id="telNumberEnterCall"><span style="color:green; font-size:15px">✆</span></button><br>
 				<span id="telError">&nbsp;</span>
 			</div>
 		</div>

@@ -2,7 +2,7 @@
     "description": "__MSG_extensionDescription__",
     "manifest_version": 2,
     "name": "__MSG_extensionName__",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "default_locale": "en",
     "icons": {
         "48": "icons/telefonliste.svg"
@@ -10,6 +10,7 @@
 
     "applications": {
         "gecko": {
+            "id": "{259559e5-2391-4a38-aa74-a19e732c84e8}",
             "strict_min_version": "77.0"
         }
     },
@@ -35,13 +36,16 @@
     "permissions": [
         "storage",
         "http://fritz.box/*",
+        "https://fritz.box/*",
         "menus"
     ],
     
     "optional_permissions": [
         "nativeMessaging",
         "notifications",
-        "http://*/*"
+        "http://*/*",
+        "https://*/*",
+        "file://*/*"
     ]
 
 }

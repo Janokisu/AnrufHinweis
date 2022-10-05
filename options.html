@@ -59,9 +59,23 @@ td {
   text-decoration: none; /*Unterstrich entfernen*/
 }
 
+
+.telLink_offnen_error_vis{
+  color: blue;
+  text-decoration: underline;
+  text-align: center;
+  
+  cursor: pointer;
+  
+  background: red;
+}
+
 </style>
 </head>
 <body>
+<!-- <input id="testi" type="button" value="start"> //-->
+<!-- <input id="testi2" type="button" value="stop"> //-->
+<!-- <input id="testi3" type="button" value="los"> //-->
 <a href="help/help.html" target="_blank" rel="noopener" id="help">?</a>
 <form>
 <div style="display:none">
@@ -86,7 +100,8 @@ td {
     <tr><td colspan="2"><input type="checkbox" id="benach"><label for="benach" data-i18n="tel_bena"></label></td></tr>
     <tr><td colspan="2"><input type="checkbox" id="vpasst"><label for="vpasst" data-i18n="bena_verpa"></label></td></tr>
     <tr><td colspan="2"><input type="checkbox" id="pbook"><label for="pbook" data-i18n="tel_stat_num"></label></td></tr>
-	<tr><td colspan="2"><input type="checkbox" id="contmenu"><label for="contmenu" data-i18n="lang_contmenu"></label></td></tr>
+    <tr><td colspan="2"><input type="checkbox" id="contmenu"><label for="contmenu" data-i18n="lang_contmenu"></label></td></tr>
+    <tr><td colspan="2"><input type="checkbox" id="telLink_offnen"><label for="telLink_offnen" data-i18n="lang_telLink_offnen"></label></td><td id="telLink_offnen_error" style="width: 150px;"></td></tr>
 </table> 
 <br>
 
@@ -112,7 +127,8 @@ td {
 
 <br>
 
-<input id="save" type="button" data-i18n="save">
+<input id="save" type="button" data-i18n="save"><br><br>
+
 </form>
 </body>
 <script src="tools.js"></script>

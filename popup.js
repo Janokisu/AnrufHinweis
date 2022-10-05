@@ -1,5 +1,15 @@
+const REG_NAME = new Array("Anrufliste", "Telefonbuch", "Telefon");
+const REG_REG = new Array("Register_Anruf", "Register_Telefonbuch", "Register_Telefon");
+
 let PYTHON_OK = false;
 let CALLING_BUSSY = false;
+let BUCH_RELOAD = false;
+
+let CALL_list = "";
+let CALL_list_raw = [];
+
+let PHONE_list = "";
+let PHONE_list_raw = [];
 
 
 let callingName = document.getElementById("callingName");
@@ -11,7 +21,14 @@ document.getElementById("Register_Anruf").addEventListener("click", function(){
 });
 
 document.getElementById("Register_Telefonbuch").addEventListener("click", function(){
-    change_Register(1);
+  if(BUCH_RELOAD == false){
+    BUCH_RELOAD = true;
+    browser.runtime.sendMessage({
+      "refresh_phonebook": true
+    });
+  }
+  
+  change_Register(1);
 });
 
 document.getElementById("Register_Telefon").addEventListener("click", function(){
@@ -22,13 +39,6 @@ document.getElementById("Register_Telefon").addEventListener("click", function()
 document.getElementById("settings_link").addEventListener("click", function(){
     browser.runtime.openOptionsPage()
 });
-
-document.getElementById("refresh_phonebook").addEventListener("click", function(){
-    browser.runtime.sendMessage({
-		"refresh_phonebook": true
-	});
-});
-
 
 
 function change_Window(x){
@@ -43,20 +53,27 @@ function change_Window(x){
 
 
 function change_Register(x){
-	let div = new Array("Anrufliste", "Telefonbuch", "Telefon");
-	let reg = new Array("Register_Anruf", "Register_Telefonbuch", "Register_Telefon");
+
 	
+  document.getElementById("Eintrag_suchen_text").style.display = "none";
+  document.getElementById("Eintrag_suchen_text").value = "";
+  
+  document.getElementById( "Eintrag_suchen" ).style.display = "inline-block"
 	
-	for(id of div){
+	for(id of REG_NAME){
 		document.getElementById( id ).style.display = "none"
 	}
 	
-	for(id of reg){
+	for(id of REG_REG){
 		document.getElementById( id ).style.backgroundColor = "#eee"
 	}
 	
-	document.getElementById( div[x] ).style.display = "inline-table" 
-	document.getElementById( reg[x] ).style.backgroundColor = "#fff"
+	document.getElementById( REG_NAME[x] ).style.display = "inline-table" 
+	document.getElementById( REG_REG[x] ).style.backgroundColor = "#fff"
+  
+  if(x == 2){
+    document.getElementById( "Eintrag_suchen" ).style.display = "none"
+  }
 }
 
 
@@ -154,7 +171,7 @@ document.getElementById("telNumberEnterCall").addEventListener("click", function
 	let KA = nummer.indexOf("(");
 	let KB = nummer.indexOf(")")
 	
-	// wenn "(" oder ")" vorhanden ist
+	// "(" oder ")" ist vorhanden
 	if(KA > -1 || KB > -1){
 		//sind beide Klammern vorhanden?
 		if(KA > -1 && KB > -1){
@@ -180,6 +197,7 @@ document.getElementById("telNumberEnterCall").addEventListener("click", function
 	browser.runtime.sendMessage({
 		"Call_Number": callingNumber.innerText
 	}).then(connecting, onError);
+	
 });
 
 
@@ -304,6 +322,8 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 function start(){
 	document.getElementById("telNumberEnter").placeholder = browser.i18n.getMessage("telNumberEnter");
+  document.getElementById("settings_link").title = browser.i18n.getMessage( "title_einstellung" )
+  document.getElementById("Eintrag_suchen_icon").title = browser.i18n.getMessage( "title_such" )
 	
 	browser.runtime.sendMessage({
 		"checkCalling": true
@@ -362,28 +382,31 @@ function viewCallList(obj){
     //console.warn(obj)
 
     if(obj.hasOwnProperty("callList") && obj["callList"] != "" && obj["callList"] != "loading"){
-		document.getElementById("calllist").innerHTML = obj["callList"];
+      CALL_list = obj["callList"];
+      CALL_list_raw = obj["callList_raw"];
+      
+      document.getElementById("calllist").innerHTML = CALL_list;
     }
     else{
-        let text = "";
-		if(obj["callList"] == "loading"){
-			text = browser.i18n.getMessage("pop_loading");
-		}
-		else{
-			console.warn("no list!!");
-			text = browser.i18n.getMessage("no_data")
-		}
+      let text = "";
+      if(obj["callList"] == "loading"){
+        text = browser.i18n.getMessage("pop_loading");
+      }
+      else{
+        console.warn("no list!!");
+        text = browser.i18n.getMessage("no_data")
+      }
 		
-        document.getElementById("calllist").innerHTML = "<tr style='visibility:hidden'><td></td><td></td><td></td><td></td></tr>" +
-                                                        "<tr><td colspan='4' style='text-align:center'>" +
-                                                            text +
-                                                        "</td></tr>";
+      document.getElementById("calllist").innerHTML = "<tr style='visibility:hidden'><td></td><td></td><td></td><td></td></tr>" +
+                                                      "<tr><td colspan='4' style='text-align:center'>" +
+                                                          text +
+                                                      "</td></tr>";
 		
-		if(obj["callList"] != "loading"){
-			noData.addEventListener("click", function(){
-				browser.runtime.openOptionsPage()
-			});
-		}
+      if(obj["callList"] != "loading"){
+        noData.addEventListener("click", function(){
+          browser.runtime.openOptionsPage()
+        });
+      }
     }
 }
 
@@ -397,34 +420,145 @@ function getPhoneList(){
 }
 
 function viewPhoneList(obj){
-    //console.warn(obj)
+  //console.warn(obj)
 
-    if(obj.hasOwnProperty("phoneList") && obj["phoneList"] != "" && obj["phoneList"] != "loading"){
-        document.getElementById("phonelist").innerHTML = obj["phoneList"];
+  if(obj.hasOwnProperty("phoneList") && obj["phoneList"] != "" && obj["phoneList"] != "loading"){
+    PHONE_list = obj["phoneList"];
+    PHONE_list_raw = obj["phoneList_raw"];
+    
+    document.getElementById("phonelist").innerHTML = PHONE_list;
+  }
+  else{
+    let text = "";
+    if(obj["phoneList"] == "loading"){
+      text = browser.i18n.getMessage("pop_loading");
     }
     else{
-		let text = "";
-		if(obj["phoneList"] == "loading"){
-			text = browser.i18n.getMessage("pop_loading");
-		}
-		else{
-			console.warn("no list!!");
-			text = browser.i18n.getMessage("no_data");
-		}
-		
-        document.getElementById("phonelist").innerHTML = "<tr style='visibility:hidden'><td></td><td></td><td></td></tr>" +
-                                                        "<tr><td colspan='3' style='text-align:center'>" +
-                                                            text +
-                                                        "</td></tr>";
+      console.warn("no list!!");
+      text = browser.i18n.getMessage("no_data");
+    }
+    
+    document.getElementById("phonelist").innerHTML = "<tr style='visibility:hidden'><td></td><td></td><td></td></tr>" +
+                                                    "<tr><td colspan='3' style='text-align:center'>" +
+                                                        text +
+                                                    "</td></tr>";
                                                         
 
-		if(obj["phoneList"] != "loading"){
-			noData.addEventListener("click", function(){
-				browser.runtime.openOptionsPage()
-			});
-		}
+    if(obj["phoneList"] != "loading"){
+      noData.addEventListener("click", function(){
+        browser.runtime.openOptionsPage()
+      });
     }
+  }
 }
+
+
+// ----------------------------- Eintrag_suchen --------------------------
+
+function Eintrag_suchen(suche){
+  suche = suche.trim().toLowerCase();
+  
+  console.warn(suche)
+  
+  if(document.getElementById( REG_NAME[0] ).style.display != "none"){
+    //Anrufliste
+    
+    if(CALL_list_raw.length > 0){
+      
+      let eint;
+      let call_list = "";
+      
+      for(Eintrag of CALL_list_raw){
+        eint = Eintrag.nummer.toLowerCase() + ";" + Eintrag.title;
+        
+        if(eint.search(suche) != -1){
+          console.log(eint)
+          call_list += "<tr><td>" + Eintrag.typ + "</td><td><span class='link_font' title='"+Eintrag.title+"'>" + Eintrag.nummer + "</span></td><td>" + Eintrag.dauer + "</td><td>" + Eintrag.datum + "</td></tr>";
+        } 
+      }
+      
+      document.getElementById("calllist").innerHTML = call_list;
+    }
+  }
+  else if(document.getElementById( REG_NAME[1] ).style.display != "none"){
+    //Telefonbuchliste
+    
+    if(PHONE_list_raw.length > 0){
+      
+      let eint;
+      let phone_list = "";
+      
+      for(Eintrag of PHONE_list_raw){
+        eint = Eintrag.name.toLowerCase() + ";" + Eintrag.nummer.join(";");
+        
+        if(eint.search(suche) != -1){
+          console.log(eint)
+          phone_list += "<tr><td>" + Eintrag.name + "</td><td>" + Eintrag.typ.join("<br>") + "</td><td><span class='link_font'>" + Eintrag.nummer.join("</span><br><span class='link_font'>") + "<span></td></tr>";
+
+          //call_list += "<tr><td>" + Eintrag.typ + "</td><td><span class='link_font' title='"+Eintrag.title+"'>" + Eintrag.nummer + "</span></td><td>" + Eintrag.dauer + "</td><td>" + Eintrag.datum + "</td></tr>";
+        } 
+      }
+      
+      document.getElementById("phonelist").innerHTML = phone_list;
+    }
+  }
+  
+  //let CALL_list_raw = [];
+  //let PHONE_list_raw = [];
+}
+
+
+// ----------------------------- Eintrag_suchen EventListener --------------------------
+Eintrag_suchen_text_timeout = 0;
+document.getElementById("Eintrag_suchen_text").addEventListener("keyup", function(){
+    clearTimeout(Eintrag_suchen_text_timeout);
+    
+    Eintrag_suchen_text_timeout = setTimeout(() => {
+        Eintrag_suchen( document.getElementById("Eintrag_suchen_text").value );
+    }, 200);
+});
+
+
+LOC_Eintrag_suchen = false;
+document.getElementById("Eintrag_suchen_icon").addEventListener("mousedown", function(evt){
+  
+  LOC_Eintrag_suchen = true;
+  	setTimeout(() => {
+		//schlechter workround, um blur zu unterbinden! (todo)
+      LOC_Eintrag_suchen = false;
+    }, 100);
+  
+});
+
+
+document.getElementById("Eintrag_suchen_icon").addEventListener("click", function(evt){
+  if(document.getElementById("Eintrag_suchen_text").style.display == "none"){
+    document.getElementById("Eintrag_suchen_text").style.display = "inline-block";
+    document.getElementById("Eintrag_suchen_text").focus();
+  }
+  else{
+    document.getElementById("Eintrag_suchen_text").style.display = "none";
+    document.getElementById("Eintrag_suchen_text").value = "";
+    
+    //reset
+    if(document.getElementById( REG_NAME[0] ).style.display != "none"){
+      document.getElementById("calllist").innerHTML = CALL_list;
+    }
+    else if(document.getElementById( REG_NAME[1] ).style.display != "none"){
+      document.getElementById("phonelist").innerHTML = PHONE_list;
+    }
+  }
+
+});
+
+
+document.getElementById("Eintrag_suchen_text").addEventListener("blur", function(){
+  if(LOC_Eintrag_suchen == false && document.getElementById("Eintrag_suchen_text").value.trim() == ""){
+    document.getElementById("Eintrag_suchen_text").style.display = "none";
+  }
+});
+
+// ----------------------------- Eintrag_suchen Ende --------------------------
 
 
 
