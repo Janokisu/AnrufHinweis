@@ -129,6 +129,11 @@
         "description": ""
     },
 
+    "lang_telLink_offnen": {
+        "message": "Open phone number shortcuts only with this addon",
+        "description": ""
+    },
+
     // -------------- options.js --------------
 
     "ben_fehl": {
@@ -191,11 +196,6 @@
         }
     },
 
-    "testsignal": {
-        "message": "Sending test signal",
-        "description": ""
-    },
-
     "test_CallMon": {
         "message": "Testing CallMon",
         "description": ""
@@ -206,19 +206,35 @@
         "description": ""
     },
 
+    "CallMon_gai_error": {
+        "message": "Maybe the connection to the FritzBox is interrupted?",
+        "description": ""
+    },
+
     "CallMon_aktiv": {
-        "message": "Python version: $py_version$\nCallMon is ready :)",
+        "message": "Python version: $py_version$\nCallMon version: $CallMon_version$",
         "description": "",
         "placeholders": {
             "py_version" : {
                 "content" : "$1"
+            },
+            "CallMon_version" : {
+                "content" : "$2"
             }
         }
     },
 
-    "no_signal": {
-        "message": "No signal recieved :(",
-        "description": ""
+    "CallMon_alt": {
+        "message": "Maybe you should update your 'CallMonitor.py' file\n\nNeeded version: $erwartete_version$\nIn use: $benutzte_version$",
+        "description": "",
+        "placeholders": {
+            "erwartete_version" : {
+                "content" : "$1"
+            },
+            "benutzte_version" : {
+                "content" : "$2"
+            }
+        }
     },
 
     "router_verb": {
@@ -254,6 +270,12 @@
         "message": "First, perform a successful login test",
         "description": ""
     },
+
+    "sonstige_fehler": {
+        "message": "Error",
+        "description": ""
+    },
+
 
     // -------------- popup.html --------------
 
@@ -311,6 +333,7 @@
         "message": "Dialer is not configured and therefore, it cannot establish a connection. If you need help setting this up, you can read about it in the help.",
         "description": ""
     },
+
 
     // -------------- popup.js --------------
 
@@ -424,7 +447,17 @@
     "pop_telError_klammerOffen": {
         "message": "A bracket is still open",
         "description": ""
-    }, 
+    },
+
+    "title_such": {
+        "message": "Search",
+        "description": ""
+    },
+
+    "title_einstellung": {
+        "message": "Settings",
+        "description": ""
+    },
 
 
     // -------------- background --------------
