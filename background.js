@@ -7,12 +7,14 @@ On startup, connect to the "CallMonitor" app.
 
 // ----------------------- background ----------------------------------
 
-let PhonebookList_typ = {
+const PhonebookList_typ = {
 		"home" : "🏠",
 		"mobile" : "📱",
 		"work" : "💼",
 		"fax" : "📠"
 }
+
+
 
 let port="";
 let GL_username;
@@ -28,12 +30,11 @@ let GL_only_num_reg;
 let GL_modi = 0;
 let GL_modi_check = false;
 
-let GL_py_ok = false;
-
 let GL_alarm = new Audio("sound/telefon.ogg");
 GL_alarm.loop = true;
 
 GL_verpa_anz = false;
+GL_executeScript = false;
 
 GL_phone_book = false;
 GL_phone_book_list = {};
@@ -41,7 +42,9 @@ GL_phone_book_list2 = {};
 
 GL_call_list = [];
 GL_call_list_popup = "loading";
+GL_call_list_popup_raw = [];
 GL_phone_list_popup = "loading";
+GL_phone_list_popup_raw = [];
 
 
 
@@ -70,7 +73,6 @@ function permissions_listener(state, result) {
         break;
         case "nativeMessaging":
             GL_permission_nati = state;
-            python_timeout();
         break;
         case "http://*/*":
         case "https://*/*":
@@ -78,6 +80,24 @@ function permissions_listener(state, result) {
         break;
     }
 }
+
+
+function tab_executeScript(tabID, changeInfo="none"){
+  
+  if(changeInfo == "none" || changeInfo.status && changeInfo.status == "complete"){
+    //console.log(tabID, changeInfo)
+    browser.permissions.contains({origins: ["http://*/*","https://*/*"]})
+    .then(function(result){
+      if(result == true){
+        browser.tabs.executeScript(tabID, {
+          file: "/telLink.js",
+          allFrames: true
+        });
+      }
+    });
+  }
+}
+
 
 function init(x){
     
@@ -120,17 +140,58 @@ function init(x){
             if( opt.hasOwnProperty("alarm_vol") ) GL_alarm.volume = Number(opt["alarm_vol"]);
             if( opt.hasOwnProperty("verpa_anz") ) GL_verpa_anz = opt["verpa_anz"];
             
-			GL_phone_book = false;
+            GL_phone_book = false;
             if( opt.hasOwnProperty("phbonu_anz") && opt["phbonu_anz"] == true && GL_username != "" ){
                 GL_phone_book = true;
             }
-			
-			if( opt.hasOwnProperty("conmenu_ok") && opt["conmenu_ok"] == true ){
-				browser.menus.create( global_contexMenu );
-			}
-			else {
-				browser.menus.remove("call_selection")
-			}
+
+            if( opt.hasOwnProperty("conmenu_ok") && opt["conmenu_ok"] == true ){
+              browser.menus.create( global_contexMenu );
+            }
+            else {
+              browser.menus.remove("call_selection")
+            }
+
+            if( opt.hasOwnProperty("telLink_ok") && opt["telLink_ok"] == true ){
+              if(GL_permission_webs == true && GL_executeScript == false){
+                GL_executeScript = true;
+                
+                //browser.tabs.query( {}, console.log);
+
+                browser.tabs.query( {}, function (tabs) { // alle Tabs-IDs auslesen
+                  //console.log(tabs)
+                  for (tab of tabs) { // alle Tabs durchgehen
+                    //script in allen Tabs einbinden
+                    if(tab.width > 0){
+                      //nur bei geladenen Tabs einbinden (zuletzt geöffnete Tabs nach Neustart, die noch nicht aktiv waren, sind noch nicht geladen)
+                      tab_executeScript(tab.id)
+                    }
+                  }
+                });
+                
+                browser.tabs.onUpdated.addListener(tab_executeScript, {properties: ["status"]});
+              }
+            }
+            else {
+              GL_executeScript = false;
+              
+              browser.tabs.query( {}, function (tabs) { // alle Tabs-IDs auslesen
+                for (tab of tabs){ // alle Tabs durchgehen
+                  //script in allen Tabs einbinden
+                  if(tab.width > 0){
+                    //nur bei geladenen Tabs einbinden (zuletzt geöffnete Tabs nach Neustart, die noch nicht aktiv waren, sind noch nicht geladen)
+                    try{
+                      browser.tabs.sendMessage(tab.id, {
+                        "telLink_func_destroy": true
+                      });
+                    } catch(e){}
+                    
+                  }
+                }
+              });
+              
+              browser.tabs.onUpdated.removeListener(tab_executeScript);
+            }
         }
         else{
             //first start
@@ -148,7 +209,8 @@ function init(x){
                 "alarm_vol": 1,
                 "verpa_anz": false,
                 "phbonu_anz": false,
-				"conmenu_ok": false
+                "conmenu_ok": false,
+                "telLink_ok": false,
             }
             
             
@@ -161,7 +223,7 @@ function init(x){
         if( x.hasOwnProperty("modi") ) GL_modi = Number(x["modi"]);
         else GL_modi = -1;
         
-        app_connnect();
+        CallMonitor_connnect();
         start();
     }
 }
@@ -210,7 +272,7 @@ global_contexMenu = {
 	onclick(info, tab){
 		//console.log(info.selectionText);
 		
-		let telNumber = info.selectionText.split("\n")[0].replace(/[^0-9()+*]/g, "")
+		let telNumber = info.selectionText.replace(/[^0-9()+*]/g, "")
 		//console.log(telNumber);
 		
 		Listener_SelectionNumber = telNumber;
@@ -223,9 +285,9 @@ global_contexMenu = {
 // ------------------------- settings changed --------------------------
 
 function settings_changed(){
-    init("start");
-	console.error("einstellung geändert")
-    pop();
+  init("start");
+  console.info("Einstellung geändert")
+  pop();
 }
 
 
@@ -235,76 +297,65 @@ function settings_changed(){
 // ----------------------- Python --------------------------------------
 
 
-function start_list(){
-    if(port){
-        let FBox = GL_Fritz_URL.split("//")[1];
-        console.log("Sending: listen_" + FBox);
-        port.postMessage("listen_" + FBox);
-    }
+
+
+let GL_PythonListen = new PythonListen(); // <-- tools.js
+
+GL_PythonListen.errorEvent = function(evt){
+  console.warn("errorEvent: ", evt);
+  
+  browser.browserAction.setBadgeBackgroundColor({color: "#CC0000"});
+  browser.browserAction.setBadgeText({text: "!"});
+  
+  switch(evt.state){
+    case 0:
+      console.warn("diskontet:\n", evt.message);
+      note(browser.i18n.getMessage("py_setting_erro"), evt.message);
+    break;
+    
+  }
 }
 
-let GL_py_timeout=0;
-function app_connnect(){    
-    if(port.onMessage && port.onMessage.hasListener(app_listener) ){
-        port.onMessage.removeListener(app_listener) 
-    }
-    console.log("Verbinde zur App");
-    
-    GL_py_ok = true;
-    if(port) port.disconnect();
-    
-    if(GL_permission_nati == true){
-        port = browser.runtime.connectNative("CallMonitor"); // <--- pythonverweis
-        port.onDisconnect.addListener(function(e){
-          GL_py_ok = false;
-          console.warn("diskontet:\n", e.error);
-          note(browser.i18n.getMessage("py_setting_erro"), e.error);
-        });
-        
-        port.onMessage.addListener(app_listener) 
-    } else GL_py_ok = false;
-    
-    start_list();
-    GL_py_timeout = setTimeout(() => {
-        python_timeout();
-    }, 5000);
+GL_PythonListen.statechange = function(evt){
+  console.log("statechange: ", evt);
+  
+  if(evt == 5){
+    console.info("Fbox connected");
+    browser.browserAction.setBadgeText({text: ""});
+  }
 }
 
-function python_timeout(){
-    if(GL_permission_nati == true){
-		if(GL_py_ok == true){
-			browser.browserAction.setBadgeText({text: ""});
-		}
-		else{
-			browser.browserAction.setBadgeBackgroundColor({color: "#CC0000"});
-			browser.browserAction.setBadgeText({text: "!"});
-			
-			GL_py_timeout = setTimeout(() => {
-				python_timeout();
-			}, 60*1000);
-		}
-    }
+GL_PythonListen.callMon = function(evt){
+  console.info("callMon: ", evt);
+  
+  work(evt)
 }
 
-/*
-Listen for messages from the app.
-*/
-function app_listener(response){
-    console.log("Received: " + response);
-
-    let info = response.split(";")
-    if(info[0] == "call") work(info);
-    else if(info[0] == "error"){
-        GL_py_ok = false;
-        python_timeout();
-    }
-    
-    if(response == "Warte auf Ereignis ..."){
-        clearTimeout(GL_py_timeout);
-        browser.browserAction.setBadgeText({text: ""});
-    }
-    
+GL_PythonListen.push = function(evt){
+  console.log("push: ", evt);
 }
+
+
+
+
+
+function CallMonitor_connnect(){    
+    
+  GL_PythonListen.stop();
+  
+  GL_PythonListen.start();
+
+
+  let FBox = GL_Fritz_URL.split("//")[1];
+  console.log("Sending: listen_" + FBox);
+
+  GL_PythonListen.send("listen_" + FBox)
+
+
+}
+
+
+
 
 //~ /*
 //~ On a click on the browser action, send the app a message.
@@ -479,21 +530,23 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
        settings_changed();
     }
     
-    
+    /*
     if ( request.hasOwnProperty("python erreichbar") ) {
-       app_connnect();
+       CallMonitor_connnect();
     }
-    
+    */
     if( request.hasOwnProperty("callListTransfer") ){
         blink_missed("off");
         sendResponse({
-            callList: GL_call_list_popup
+            callList: GL_call_list_popup,
+            callList_raw: GL_call_list_popup_raw
         });
     }
 	
 	if( request.hasOwnProperty("phoneListTransfer") ){
         sendResponse({
-            phoneList: GL_phone_list_popup
+            phoneList: GL_phone_list_popup,
+            phoneList_raw: GL_phone_list_popup_raw
         });
     }
     
@@ -504,15 +557,17 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
     
 	if ( request.hasOwnProperty("Call_Number") ) {
-       callNumber( request["Call_Number"], sendResponse );
-	   callNumber_check = true;
-	   
-	   setTimeout(() => {
-		   if(callNumber_check == true){
-			   startGetDialConfig();
-		   }
-		}, 3000);
-    }
+    //Nummer anrufen
+    callNumber( request["Call_Number"], sendResponse );
+    callNumber_check = true;
+    
+    //wenn nach 3 sek callNumber_check noch true ist, ist alles gut. Anstonsten gabe es probleme 
+    setTimeout(() => {
+      if(callNumber_check == true){
+        startGetDialConfig();
+      }
+    }, 3000);
+  }
 	
 	if ( request.hasOwnProperty("HangUp") ) {
        hangup(sendResponse);
@@ -545,7 +600,7 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 	
 	if ( request.hasOwnProperty("checkPython") ) {	
 		sendResponse({
-			"pythonCheck": GL_py_ok
+			"pythonCheck": GL_PythonListen.isRunning()
 		});
     }
 })
@@ -574,7 +629,7 @@ function callNumber(number, sendResponse){
 		Listener_Dial = [0, number];
 		blink_connecting("on");
 		
-		if(GL_py_ok == false){
+		if(GL_PythonListen.isRunning() == false){
 			//console.log("set Time connectingStopped");
 			setTimeout(() => {
 				connectingStopped();
@@ -670,7 +725,6 @@ function blink_missed(x){
         }
         else if(x == "off"){
             clearInterval(blink_missed_interval);
-            python_timeout()
 			blink_missed_toggle = 0;
 			blink_missed();
         }
@@ -779,47 +833,64 @@ function prepareViewPhonebookList(request){
 
 
 function pop(){
-    //type: 1 =>Angenommen; 2 => Verpasst; 3 => Angerufen; 10 => Blockiert;
-    let pop_typ_object = {
-        1:  browser.i18n.getMessage("con_typ_on"),
-        2:  browser.i18n.getMessage("con_typ_missed"),
-        3:  browser.i18n.getMessage("con_typ_call"),
-        10: browser.i18n.getMessage("con_typ_block")
-    }
+  //type: 1 =>Angenommen; 2 => Verpasst; 3 => Angerufen; 10 => Blockiert;
+  let pop_typ_object = {
+      1:  browser.i18n.getMessage("con_typ_on"),
+      2:  browser.i18n.getMessage("con_typ_missed"),
+      3:  browser.i18n.getMessage("con_typ_call"),
+      10: browser.i18n.getMessage("con_typ_block")
+  }
     
 	//Anrufliste erstellen
 	//GL_call_list: Daten kommen von prepareViewCallList() und wird hier mit callList_start(); ausgeführt
-    //console.warn(GL_call_list)
-     GL_call_list_popup = "";
-     for(call of GL_call_list){
-        //console.warn(call["CallederNumber"])
-        if(GL_check_num_anz == true && GL_only_num_reg[ call["CallederNumber"] ] != true) continue;
-        let typ = Number(call["Type"])
-        
-        let num = "";
-		let num_title = "";
-        if(typ == 3) num = call["Called"]; //angerufen
-        else num = call["Caller"];
-        
-        num_title = num;
-		
-        if(num == "") num = browser.i18n.getMessage("caller_verb"); //Nr. verborgen
-        else{
-            let tmp = returnNumberName(num); //Eintrag statt Nr
-            if(tmp != "") num = tmp;
-        }
-        
-		
-        
-        GL_call_list_popup += "<tr><td>" + pop_typ_object[typ] + "</td><td><span class='link_font' title='"+num_title+"'>" + num + "</span></td><td>" + call["Duration"] + "</td><td>" + call["Date"] + "</td></tr>";
+  //console.warn(GL_call_list)
+  GL_call_list_popup = "";
+  GL_call_list_popup_raw = [];
+  for(call of GL_call_list){
+    //console.warn(call["CallederNumber"])
+    if(GL_check_num_anz == true && GL_only_num_reg[ call["CallederNumber"] ] != true) continue;
+    
+    let typ = Number(call["Type"])
+    let num = "";
+    let num_title = "";
+    
+    if(typ == 3) num = call["Called"]; //angerufen
+    else num = call["Caller"];
+
+    num_title = num;
+
+    if(num == "") num = browser.i18n.getMessage("caller_verb"); //Nr. verborgen
+    else{
+      let tmp = returnNumberName(num); //Eintrag statt Nr
+      if(tmp != "") num = tmp;
     }
-    //console.error(GL_call_list_popup)
+
+
+
+    GL_call_list_popup += "<tr><td>" + pop_typ_object[typ] + "</td><td><span class='link_font' title='"+num_title+"'>" + num + "</span></td><td>" + call["Duration"] + "</td><td>" + call["Date"] + "</td></tr>";
+
+    GL_call_list_popup_raw.push({
+      "typ": pop_typ_object[typ],
+      "title": num_title,
+      "nummer": num,
+      "dauer": call["Duration"],
+      "datum": call["Date"]
+    }) 
+  }
+  //console.error(GL_call_list_popup)
 	
 	//console.error(GL_phone_book_list2)
 	GL_phone_list_popup = "";
+	GL_phone_list_popup_raw = [];
 	for(name in GL_phone_book_list2){
 		GL_phone_list_popup += "<tr><td>" + name + "</td><td>" + GL_phone_book_list2[name].type.join("<br>") + "</td><td><span class='link_font'>" + GL_phone_book_list2[name].phonenumber.join("</span><br><span class='link_font'>") + "<span></td></tr>";
-	}
+    
+    GL_phone_list_popup_raw.push({
+      "name": name,
+      "typ": GL_phone_book_list2[name].type,
+      "nummer": GL_phone_book_list2[name].phonenumber
+    })
+  }
 	//console.info(GL_phone_list_popup)
 	
 	try{

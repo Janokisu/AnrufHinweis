@@ -1,3 +1,5 @@
+const CallMon_Version = "0.2";
+
 
 // Error
 function onError(error) {
@@ -171,4 +173,150 @@ function sektozeit(sek){
     let h = put0(Math.floor(sek / 3600));
     
     return h+":"+m+":"+s;
+}
+
+
+class PythonListen{
+  
+  #port = null;
+  #state = 0;
+  #running = false;
+  
+  #PyVer = 0;
+  #CallMonVer = 0
+   
+  
+  isRunning(){
+    return this.#running;
+  }
+  
+  getPyVer(){
+    return this.#PyVer;
+  }
+  
+  getCallMonVer(){
+    return this.#CallMonVer;
+  }
+   
+  getState(){
+    return this.#state;
+  }
+  
+  
+  connect(){
+    const self = this; //damit die Lister einen Bezug haben
+    
+    
+    if(this.#running == true){
+      console.warn("Verbindung besteht bereits")
+      return 0;
+    }
+    
+    let ok = true;
+    
+    this.#running = true;
+    
+    try{
+      this.#port = browser.runtime.connectNative("CallMonitor"); // <--- pythonverweis
+      
+      this.#port.onDisconnect.addListener(function(e){
+        
+        self.stop();
+        
+        self.errorEvent({
+          "state": 0,
+          "code": 0,
+          "message": e.error
+        });
+      });
+      
+      
+      this.#port.onMessage.addListener(function(response){
+        self.#messageHandle(self, response);
+      }); 
+    } catch(e){
+      this.stop();
+      ok = false;
+    }
+    
+    return ok;
+  }
+  
+  start(){
+    if(this.connect() == true){
+      if(this.send("version") == true){
+        return true;
+      } 
+      else{
+        return false;
+      }
+    } 
+    else{
+      return false;
+    }
+  }
+  
+  stop(){
+    if(this.#port){
+      this.#port.disconnect();
+      this.#port = null;
+    }
+    this.#running = false;
+    return true;
+  }
+  
+  send(value){
+    if(this.#port){
+      this.#port.postMessage(value+"");
+      return true;
+    } 
+    else{
+      return false;
+    }
+  }
+  
+  errorEvent = function(object){};
+  
+  statechange = function(object){};
+  
+  callMon = function(object){};
+  
+  push = function(object){};
+  
+  #messageHandle(self, response){
+    //console.log("Received: " + response);
+    
+    let info = response.split(";");
+    
+    switch(info[0]){
+      case "error":
+        let tmp = info.concat();
+        tmp.splice(0,2);
+        self.errorEvent({
+          "state": self.#state,
+          "code": Number(info[1]),
+          "message": tmp.join(";")
+        });
+      break;
+      
+      case "state":
+        if(info[1]) self.#state = Number(info[1]);
+        self.statechange(self.#state);
+      break;
+      
+      case "version":
+        if(info[1]) self.#PyVer = info[1];
+        if(info[2]) self.#CallMonVer = info[2];
+      break;
+      
+      case "call":
+        self.callMon(info);
+      break;
+      
+      default:
+        self.push(info);
+    }
+  }
+  
+  
 }

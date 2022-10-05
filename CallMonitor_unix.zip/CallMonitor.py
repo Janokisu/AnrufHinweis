@@ -11,20 +11,23 @@ import time
 
 DEBUGGING = False
 
+CallMon_Version = "0.2"
+
 class CallMonServer():
     #source: http://www.dahlgrimm.de/PhythonScripte/callmon/callmon.html -> CallMonServer.py
     
-    def __init__(self, master, fritzIP):
+    def __init__(self, master, fritzIP, check=0):
         self.running = False
         self.master = master
+        self.master.sendMessage("state;2") # aufruf gelungen
         self.master.sendMessage("start listening on " + fritzIP)
         
-        self.FRITZBOX_IP           =fritzIP  # IP-Adresse oder Hostname der Fritzbox
-        self.FRITZBOX_CALLMON_PORT =1012         # CallMonitor-Port auf der Fritzbox
-        self.STATUS_TO_TERMINAL    =True 
+        self.FRITZBOX_IP           = fritzIP  # IP-Adresse oder Hostname der Fritzbox
+        self.FRITZBOX_CALLMON_PORT = 1012         # CallMonitor-Port auf der Fritzbox
+        self.STATUS_TO_TERMINAL    = True 
           
         if(DEBUGGING):
-            self.master.sendMessage("hm2")
+            self.master.sendMessage("DebugCode: 2")
         self.startFritzboxCallMonitor()
         #self.runFritzboxCallMonitor()
     
@@ -32,7 +35,7 @@ class CallMonServer():
     
     def startFritzboxCallMonitor(self):
         if(DEBUGGING):
-            self.master.sendMessage("hm3")
+            self.master.sendMessage("DebugCode: 3")
         self.worker1=threading.Thread(target=self.runFritzboxCallMonitor, name="runFritzboxCallMonitor")
         self.worker1.setDaemon(True)
         self.worker1.start()
@@ -42,84 +45,90 @@ class CallMonServer():
     
     
     def runFritzboxCallMonitor(self):
+        self.master.sendMessage("state;3") # Thread gelungen
         if(DEBUGGING):
-            self.master.sendMessage("hm4")
+            self.master.sendMessage("DebugCode: 4")
         while True: # Socket-Connect-Loop
             if(DEBUGGING):
-                self.master.sendMessage("hm5")
+                self.master.sendMessage("DebugCode: 5")
             self.recSock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
                 self.recSock.connect((self.FRITZBOX_IP, self.FRITZBOX_CALLMON_PORT))
             except socket.herror as e:
+                # h = host
                 if(DEBUGGING):
-                    self.master.sendMessage("hm51")
-                self.master.sendMessage("error;socket.herror:\n" + str(e))
+                    self.master.sendMessage("DebugCode: 5.1")
+                self.master.sendMessage("error;2;socket.herror:\n" + str(e))
                 time.sleep(10)
                 continue
             except socket.gaierror as e:
+                # gai = getaddrinfo
                 if(DEBUGGING):
-                    self.master.sendMessage("hm52")
-                self.master.sendMessage("error;socket.gaierror:\n" + str(e))
+                    self.master.sendMessage("DebugCode: 5.2")
+                self.master.sendMessage("error;3;socket.gaierror:\n" + str(e))
                 time.sleep(10)
                 continue
             except socket.timeout as e:
                 if(DEBUGGING):
-                    self.master.sendMessage("hm53")
-                self.master.sendMessage("error;socket.timeout:\n" + str(e))
+                    self.master.sendMessage("DebugCode: 5.3")
+                self.master.sendMessage("error;4;socket.timeout:\n" + str(e))
                 continue
             except socket.error as e:
                 if(DEBUGGING):
-                    self.master.sendMessage("hm54")
-                self.master.sendMessage("error;socket.error:\n" + str(e))
+                    self.master.sendMessage("DebugCode: 5.4")
+                self.master.sendMessage("error;5;socket.error:\n" + str(e))
                 time.sleep(10)
                 continue
             except Exception as e:
                 if(DEBUGGING):
-                    self.master.sendMessage("hm55")
+                    self.master.sendMessage("DebugCode: 5.5")
                 tm=time.strftime("%Y.%m.%d-%H:%M:%S")
-                self.master.sendMessage("error;%s Error: %s"%(tm, str(e)))
+                self.master.sendMessage("error;10;%s Error: %s"%(tm, str(e)))
                 time.sleep(10)
                 continue
             if self.STATUS_TO_TERMINAL==True:
                 tm=time.strftime("%Y.%m.%d-%H:%M:%S")
                 self.master.sendMessage("%s Die Verbindung zum CallMonitor der Fritzbox wurde hergestellt!"%(tm))
                 #self.master.sendMessage("listening")
-
+                
+            self.master.sendMessage("state;4") # keine Fehler / Verbindung zur FBox gelungen
+            
             while True: # Socket-Receive-Loop
                 if(DEBUGGING):
-                    self.master.sendMessage("hm6")
+                    self.master.sendMessage("DebugCode: 6")
                 try:
                     if(DEBUGGING):
-                        self.master.sendMessage("hm7")
+                        self.master.sendMessage("DebugCode: 7")
                     self.running = True
+                    self.master.sendMessage("state;5") # Listener ist aktiv
                     self.master.sendMessage("Warte auf Ereignis ...")
                     ln = str( self.recSock.recv(256).strip() )
                 except:
                     if(DEBUGGING):
-                        self.master.sendMessage("hm8")
+                        self.master.sendMessage("DebugCode: 8")
                     ln=""
                 
                 if(DEBUGGING):
-                    self.master.sendMessage("hm9")
+                    self.master.sendMessage("DebugCode: 9")
                 if ln!="" or len(ln) > 8:
                     if(DEBUGGING):
-                        self.master.sendMessage("hm10")
+                        self.master.sendMessage("DebugCode: 10")
                     self.master.sendMessage("call;"+ln)
                     #self.fb_queue.put(ln)
                 else:
-                    self.master.sendMessage("error;callfehler:"+ln)
+                    self.master.sendMessage("error;20;callfehler:"+ln)
                     if(DEBUGGING):
-                        self.master.sendMessage("hm11")
+                        self.master.sendMessage("DebugCode: 11")
                     if self.STATUS_TO_TERMINAL==True:
                         if(DEBUGGING):
-                            self.master.sendMessage("hm12")
+                            self.master.sendMessage("DebugCode: 12")
                         tm=time.strftime("%Y.%m.%d-%H:%M:%S")
                         self.master.sendMessage("%s Die Verbindung zum CallMonitor der Fritzbox ist abgebrochen!"%(tm))
                     self.master.sendMessage("CONNECTION_LOST")
                     self.running = False
                     #self.fb_queue.put("CONNECTION_LOST")
                     if(DEBUGGING):
-                        self.master.sendMessage("hm13")
+                        self.master.sendMessage("DebugCode: 13")
                     break   # zurück in die Socket-Connect-Loop
 
 
@@ -180,6 +189,7 @@ class app2():
             self.callmon = CallMonServer(self, fritzIP)
 
     def start(self):
+        self.sendMessage("state;1") # Start gelungen
         self.sendMessage("Python started")
         
         while True:
@@ -189,7 +199,7 @@ class app2():
                 self.sendMessage("pong")
                 
             if receivedMessage == "version":
-                self.sendMessage("version;" + str(sys.version.split(" ")[0]))
+                self.sendMessage("version;" + str(sys.version.split(" ")[0]) + ";" + CallMon_Version)
 
             if receivedMessage[:6] == "listen": 
                 self.listen(receivedMessage[7:]) #fritzIP
@@ -236,6 +246,7 @@ class app3():
         
 
     def start(self):
+        self.sendMessage("state;1") # Start gelungen
         self.sendMessage("Python started")
         
         while True:
@@ -245,7 +256,7 @@ class app3():
                 self.sendMessage("pong")
                 
             if receivedMessage == "version":
-                self.sendMessage("version;" + str(sys.version.split(" ")[0]))
+                self.sendMessage("version;" + str(sys.version.split(" ")[0]) + ";" + CallMon_Version)
 
             if receivedMessage[:6] == "listen": 
                 self.listen(receivedMessage[7:]) #fritzIP

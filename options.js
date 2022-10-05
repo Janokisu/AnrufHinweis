@@ -1,12 +1,24 @@
 const red = "red";
 const green = "green";
-const ora = "orange";
+const orange = "orange";
+const FBox_URL = "http://fritz.box";
+
+const AccessAllWebsitesPermissionRequest = {
+  origins: ["http://*/*","https://*/*"]
+};
+
+//const AccessAllWebsitesPermissionRequest = {
+//  permissions: ["file://*/*"],
+//  origins: ["http://*/*","https://*/*"]
+//};
+//
 
 let GL_alarm;
 let GL_login = false;
-let GL_py_ver;
 let GL_password;
 let GL_dumiPass = "************"
+let GL_accessAllWebsitesPermission = [false, false]; // [0]=http://fritz.box; [1]=telLink
+
 
 let Language_Array = ["de"];
 
@@ -42,15 +54,39 @@ let check_nachrich  = document.getElementById("benach");
 let check_verpasst  = document.getElementById("vpasst");
 let check_pho_book  = document.getElementById("pbook");
 let check_con_menu  = document.getElementById("contmenu");
+let check_tel_link  = document.getElementById("telLink_offnen");
 
 let num_list        = document.getElementById("nummer_liste");
 
 
+function accessAllWebsites(x){
+  return new Promise(function(resolve, reject) {
+    if(x == 1){
+      browser.permissions.request(AccessAllWebsitesPermissionRequest)
+      .then(function(isPermission){
+        resolve(isPermission);
+      });
+    }
+    else if(x == 0){
+      browser.permissions.contains(AccessAllWebsitesPermissionRequest)
+      .then(function(isPermission){
+        resolve(isPermission);
+      });
+    }
+    else if(x == -1){
+      if(GL_accessAllWebsitesPermission[0] == false && GL_accessAllWebsitesPermission[1] == false){
+        //wenn Zugriffsrechte auf alle Webseiten nicht mehr benötigt werden, dann die Rechte entfernen
+        browser.permissions.remove(AccessAllWebsitesPermissionRequest)
+        .then(resolve(true));
+      }
+    }
+  });
+}
 
 
 function login_test(i = 0){
     
-    lo_test.style.background = ora;
+    lo_test.style.background = orange;
     
     let rout_url = routeurl.value;
     let name = username.value.trim();
@@ -97,14 +133,14 @@ function login_test(i = 0){
                 //console.warn("getLuaUrl", request.statusText, request.responseText);
                 login_test(1);
             } else if (request.status == 401) {
-                console.warn("getLuaUrl: ", request.statusText, request.responseText);
+                console.warn("getLuaUrl", request.statusText, request.responseText);
                 lo_test.innerText = browser.i18n.getMessage("login 401");
                 lo_test.style.background = red;
                 GL_login = false;
             } else if (request.status == 500) {
                 GL_login = false;
                 lo_test.style.background = red;
-                console.warn("getLuaUrl: ", request.statusText, request.responseText);
+                console.warn("getLuaUrl", request.statusText, request.responseText);
                 
                 let errorCode = request.responseXML.getElementsByTagName("errorCode")[0].firstChild.data;
                 switch(errorCode){
@@ -115,10 +151,11 @@ function login_test(i = 0){
                     lo_test.innerText = browser.i18n.getMessage("fbox 606");
                     break;
                   default:
-                    lo_test.innerText = browser.i18n.getMessage("Fritz!Box error: ", request.statusText + request.responseText);
+                    lo_test.innerText = browser.i18n.getMessage("Fritz!Box error", request.statusText + request.responseText);
                     break;
+                }
             } else {
-                console.warn("getLuaUrl: ", request.statusText, request.responseText);
+                console.warn("getLuaUrl", request.statusText, request.responseText);
                 lo_test.innerText = browser.i18n.getMessage("login error", request.statusText + request.responseText);
                 lo_test.style.background = red;
                 GL_login = false;
@@ -133,13 +170,6 @@ function login_test(i = 0){
 }
 
 
-
-/*
- * 
- * python_test_start() -> python_testsignal() -> py_port_listener() -> (OK)
- *                                                                     (x) ->   python_timeout()
- *
-*/
 
 function change_volume(x){
     GL_alarm.volume = Number(x)/100;
@@ -163,97 +193,79 @@ function ruf(){
 
 // ------------------------------- python test ----------------------------------------
 
-let port="";
-let py_ok = false;
-let py_timeout=0;
 function python_test_start(){
-    py_ok = true;
-    py_test.style.background = ora;
+    py_test.style.background = orange;
     //init python-Datei
-    if(port.onMessage && port.onMessage.hasListener(py_port_listener) ){
-        port.onMessage.removeListener(py_port_listener) 
+    
+    let PyListen = new PythonListen(); // <-- tools.js
+    
+    
+    PyListen.push = function(evt){
+      console.log("push: ", evt);
     }
+
+
+    PyListen.errorEvent = function(evt){
+      console.warn("errorEvent: ", evt);
+      
+      PyListen.stop();
+      
+      py_test.style.background = red;
+      
+      switch(evt.code){
+        case 0:
+          console.warn("diskontet:\n", evt.message);
+          py_test.innerText = browser.i18n.getMessage("py_error", evt.message);
+        break;
+        
+        case 3:
+          py_test.innerText =  browser.i18n.getMessage("CallMon_gai_error");
+        break;
+        
+        case 5:
+          py_test.innerText = browser.i18n.getMessage("CallMon_port_error");
+        break;
+        
+        default:
+          py_test.innerText = browser.i18n.getMessage("sonstige_fehler") + ":\n" + evt.message;
+      }
+    }
+    
+    
+    PyListen.statechange = function(evt){
+      console.log("statechange: ", evt);
+      
+      if(evt == 5){
+        py_test.innerText = browser.i18n.getMessage("CallMon_aktiv", [PyListen.getPyVer(), PyListen.getCallMonVer()]);
+            
+        if(PyListen.getCallMonVer() == CallMon_Version){
+          py_test.style.background = green;
+        }
+        else{
+          py_test.style.background = orange;
+          alert(browser.i18n.getMessage("CallMon_alt", [CallMon_Version, PyListen.getCallMonVer()]))
+        }
+        
+        PyListen.stop();
+      }
+    }
+    
+
+    
     console.log("Verbinde zur Pythondatei");
     py_test.innerText = browser.i18n.getMessage("py_verb");
     
-    if(port) port.disconnect();
-    port = browser.runtime.connectNative("CallMonitor"); // <--- pythonverweis
-    port.onDisconnect.addListener(function(e){
-      py_ok = false;
-      console.warn("diskontet:\n", e.error);
-      py_test.innerText = browser.i18n.getMessage("py_error", e.error);
-      py_test.style.background = red;
-    });
-    port.onMessage.addListener(py_port_listener);
+    PyListen.start();
     
-    
-    clearTimeout(py_timeout);
-    python_testsignal();
-}
-
-
-
-function python_testsignal(){
-    console.log("Sende Testsignal");
-    py_test.innerText = browser.i18n.getMessage("testsignal");
     console.log("Sending:  ping");
-    port.postMessage("ping");
-    console.log("Sending:  version");
-    port.postMessage("version");
+    PyListen.send("ping");
     
-    
-    py_timeout = setTimeout(() => {
-        if(py_ok == true) python_timeout();
-    }, 2000);
+    py_test.innerText = browser.i18n.getMessage("test_CallMon");
+    let FBox = routeurl.value.split("//")[1];
+    console.log("Sending: listen_" + FBox);
+    PyListen.send("listen_" + FBox);
 }
 
-
-function py_port_listener(response){
-    console.log("Received: " + response);
-    
-    if(response == "pong"){
-        clearTimeout(py_timeout);
-        
-        py_ok = true;
-        py_test.innerText = browser.i18n.getMessage("test_CallMon");
-        let FBox = routeurl.value.split("//")[1];
-        console.log("Sending: listen_" + FBox);
-        port.postMessage("listen_" + FBox);
-        //py_test.style.background = green;
-        
-    }
-    else{
-        let info = response.split(";");
-        if(info[0] == "version"){
-            GL_py_ver = info[1];
-        }
-        else if(info[0] == "error"){
-            if(port) port.disconnect();
-            
-            py_test.style.background = red;
-            if(info[1].indexOf("socket.error:") > -1) py_test.innerText = browser.i18n.getMessage("CallMon_port_error");
-            else py_test.innerText = "Fehler:\n" + info[1];
-        }
-        else if(response == "Warte auf Ereignis ..."){
-            if(port) port.disconnect();
-            py_test.innerText = browser.i18n.getMessage("CallMon_aktiv", GL_py_ver);
-            py_test.style.background = green;
-            
-            browser.runtime.sendMessage({
-                "python erreichbar": true
-            });
-        }
-        else py_test.innerText = response;
-    }
-}
-
-
-function python_timeout(){
-    if(py_ok == false){
-        py_test.innerText = browser.i18n.getMessage("no_signal");
-        py_test.style.background = red;
-    }
-}
 
 
 //------------------------------------------- dial test ----------------------------------------
@@ -261,7 +273,7 @@ function python_timeout(){
 function dialTestStart(){
 	
 	di_test.innerText = "???";
-	di_test.style.background = ora;
+	di_test.style.background = orange;
 	
 	if(GL_login == true){
         di_test.innerText = "";
@@ -306,7 +318,7 @@ function getDialConfig(request){
 
 function router_connection(){
 
-    ro_test.style.background = ora;
+    ro_test.style.background = orange;
     
     let rout_url = routeurl.value.trim();
     
@@ -318,7 +330,7 @@ function router_connection(){
         if(request.readyState == 4){
             //console.info(request.status);
             if(request.status == 200){
-                //console.log(request.responseText);
+                console.log(request.responseText);
                 let text = request.responseText.split("<body>")[1].split("</body>")[0];
                 let tags = text.split("-");
                 ro_test.innerText = tags[0]+"\n"+tags[7].slice(-4,-2)+"."+tags[7].slice(-2);
@@ -361,6 +373,54 @@ check_nachrich.addEventListener("change", function(check){
 });
 
 
+
+
+document.getElementById("telLink_offnen_error").addEventListener("click", function(evt){
+  if(document.getElementById("telLink_offnen_error").innerText != ""){
+    accessAllWebsites(1)
+    .then(function(isPermission) {
+      if(isPermission == true){
+        telLink_show_break(0);
+        browser.runtime.sendMessage({
+          "settings_change": true
+        });
+      }
+    });
+  }
+});
+
+function telLink_show_break(x){
+  if(x == 1){
+    document.getElementById("telLink_offnen_error").innerText = browser.i18n.getMessage("erl_verw");
+    document.getElementById("telLink_offnen_error").className = "telLink_offnen_error_vis";
+  }
+  else{
+    document.getElementById("telLink_offnen_error").innerText = "";
+    document.getElementById("telLink_offnen_error").className = "";
+  }
+}
+
+check_tel_link.addEventListener("change", function(check){
+
+
+    
+    GL_accessAllWebsitesPermission[1] = check_tel_link.checked;
+    
+    telLink_show_break(0);
+    
+    
+    
+    if(check.target.checked == true){
+      accessAllWebsites(1)
+      .then(function(isPermission) {
+        if(isPermission == false){
+          telLink_show_break(1);
+        }
+      });
+    }
+});
+
+
 browser.permissions.onAdded.addListener((result) => {permissions_listener(true, result)});
 browser.permissions.onRemoved.addListener((result) => {permissions_listener(false, result)})
 function permissions_listener(state, result) {
@@ -372,9 +432,18 @@ function permissions_listener(state, result) {
         break;
         case "http://*/*":
         case "https://*/*":
-            if(state == false && check_url_Fbox() == false){
+            if(state == false){
+              //Rechte "auf alle Seiten zugreifen" wurden über die Rechteeinstellung geändert
+              if(check_tel_link.checked == true){
+                // Telefonnummer-Links
+                telLink_show_break(1);
+              }
+              
+              if(check_url_Fbox() == false){
+                // Fritzbox Verbindung
                 //console.warn("web", state);
                 alert( browser.i18n.getMessage("keine_http_rechte") );
+              }
             }
         break;
     }
@@ -384,7 +453,7 @@ function permissions_listener(state, result) {
 function check_url_Fbox(){
     let prot = routeurl.value.trim().split("://");
     let rout_url = prot[1].split("/")[0];
-    routeurl.value = prot[0] + "://" + rout_url;
+    routeurl.value = prot[0] + "://" + rout_url; //http://xyz.de/text/texttext => http://xyz.de
     
     if(rout_url == "fritz.box") return true;
     else return false;
@@ -393,31 +462,53 @@ function check_url_Fbox(){
 
 function http_check(funct, element, py=false){
     
-    let fritz = "http://fritz.box/*"
-    if(!check_url_Fbox()) fritz = "http://*/*";
+    let check_url = check_url_Fbox();
+    
+    let fritz = [FBox_URL+"/*"];
+    if(check_url == false){
+      fritz = ["http://*/*","https://*/*"];
+      GL_accessAllWebsitesPermission[0] = true;
+    }
+    else{
+      GL_accessAllWebsitesPermission[0] = false;
+    }
 
     let permissionsToRequest;
     if(py === true){
         permissionsToRequest = {
           permissions: ["nativeMessaging"],
-          origins: [fritz]
+          origins: fritz
         }
     }
     else{
         permissionsToRequest = {
-          origins: [fritz]
+          origins: fritz
         }
     }
-    
+     
+     
     browser.permissions.request(permissionsToRequest)
     .then(function(isPermission) {
-        if(isPermission) funct();
+        if(isPermission){
+          if(check_url == false){
+            GL_accessAllWebsitesPermission[0] = true;
+            
+            telLink_show_break(0);
+          } else {
+            GL_accessAllWebsitesPermission[0] = false;
+          }
+          
+          funct();
+        }
         else{
             element.innerText = browser.i18n.getMessage("erl_verw");
             element.style.background = red;
         }
     });
 }
+
+
+
 
 
 // testfunction 
@@ -469,7 +560,6 @@ save_button.addEventListener("click", function(){
     let pas = password.value
     if(pas == GL_dumiPass) pas = GL_password;
     
-    check_url_Fbox();
     let num_reg_ch = check_num_reg.checked;
     let num_anz_ch = check_num_anz.checked;
     if(num_list.value.trim() == "" && (num_reg_ch == true || num_anz_ch == true)){
@@ -491,8 +581,8 @@ save_button.addEventListener("click", function(){
         "alarm_vol": GL_alarm.volume,
         "verpa_anz": check_verpasst.checked,
         "phbonu_anz": check_pho_book.checked,
-		"conmenu_ok": check_con_menu.checked,
-		
+        "conmenu_ok": check_con_menu.checked,
+        "telLink_ok": check_tel_link.checked,
     }
     
     browser.storage.local.set({
@@ -510,6 +600,11 @@ save_button.addEventListener("click", function(){
       "option"
     );
     */
+    
+     GL_accessAllWebsitesPermission[0] != check_url_Fbox();
+     GL_accessAllWebsitesPermission[1] = check_tel_link.checked;
+    accessAllWebsites(-1);
+    
 });
 
 
@@ -532,7 +627,35 @@ inp_num_but.addEventListener("click", function(){
 });
 
 
+
+
+
+
+/*
+
+document.getElementById("testi").addEventListener("click", function(){
+    console.log("start");
+    accessAllWebsites(1)
+});
+
+document.getElementById("testi2").addEventListener("click", function(){
+    console.log("stop");
+    accessAllWebsites(-1)
+});
+
+document.getElementById("testi3").addEventListener("click", function(){
+    console.log("los");
+    XXX.send("listen_fritz.box");
+});
+
+//*/
+
+
+
 function init(x){
+  
+  //browser.tabs.query( {} , console.log);
+  
     if(x == "start"){
 		
 		username.placeholder = browser.i18n.getMessage("username");
@@ -564,9 +687,10 @@ function init(x){
 		}
         else{
 			help_link.href = "help/help_" + lang + ".html";
-		} 
-        
+		}
+		
         help_link.title = browser.i18n.getMessage( "help" )
+        
         
         if(navigator.platform.indexOf("Win") > -1){
             //Windows
@@ -591,17 +715,35 @@ function init(x){
         GL_password = opt["pass"];
         
         routeurl.value = opt["FUrl"];
+        
         check_num_reg.checked = opt["num_reg"];
         check_num_anz.checked = opt["num_anz"];
         check_anum_anz.checked = opt["anum_anz"];
         check_verpasst.checked = opt["verpa_anz"];
         check_pho_book.checked = opt["phbonu_anz"];
-		check_con_menu.checked = opt["conmenu_ok"];
+        check_con_menu.checked = opt["conmenu_ok"];
+        
+        check_tel_link.checked = opt["telLink_ok"];
+        GL_accessAllWebsitesPermission[1] = opt["telLink_ok"];
+        if(opt["telLink_ok"] == true){
+           accessAllWebsites(0)
+          .then(function(result){
+            if(result == false){
+              telLink_show_break(1);
+            }
+          });
+        }
+        
         num_list.value = opt["num_list"].join("\n");
         
-        let tmp = opt["alarm_vol"]* 100;
+        let tmp = opt["alarm_vol"] * 100;
         alavoran.value =  tmp;
         change_volume(tmp);
+        
+        //Rechte für alle Seiten entfernen, wenn es nicht mehr gebruacht wird
+        GL_accessAllWebsitesPermission[0] != check_url_Fbox();
+        GL_accessAllWebsitesPermission[1] = check_tel_link.checked;
+        accessAllWebsites(-1);
     }
 }
 
