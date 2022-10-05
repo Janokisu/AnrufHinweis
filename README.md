@@ -16,6 +16,10 @@ Eine Hilfeseite befindet sich in den Einstellungen.
 Um über ankommende Anrufe benachrichtigt zu werden, ist Python auf dem PC erforderlich.
 </p>
 </br>
+<p>
+🦊 Zum Addon: https://addons.mozilla.org/de/firefox/addon/anrufhinweis/
+</p>
+</br>
 <h4>Lizenzen:</h4>
 <ul>
 	<li>Icon "telefonliste"
@@ -34,17 +38,17 @@ Um über ankommende Anrufe benachrichtigt zu werden, ist Python auf dem PC erfor
 	</li>
 </ul>
 
-</br><p>
-Zum Addon: https://addons.mozilla.org/de/firefox/addon/anrufhinweis/
-</p></br>
+
+</br>
 <h4>Changelog:</h4>
 
 <h5>0.2.0</h5>
 
 - Hilfe-Seite (https://github.com/Janokisu/AnrufHinweis/issues/2) und den Link dazu bearbeitet (der Link ist jetzt ein ?-Symbol)
-- Tel-Links könen nun benutzt werden (https://github.com/Janokisu/AnrufHinweis/issues/4)
+- Tel-Links können nun benutzt werden (https://github.com/Janokisu/AnrufHinweis/issues/4)
 - Anrufliste und Telefonbuch können durchsucht werden
-- Verbindungstest und Aufbau mit CallMon sowie dessen Zustandsanzeige geht jetzt schneller durch
+- Verbindungstest und Aufbau mit CallMonitor sowie dessen Zustandsanzeige geht jetzt schneller durch
+- Kleinigkeiten verbessert
 
 <h5>0.1.2</h5>
 
