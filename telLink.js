@@ -8,7 +8,7 @@ function telLinkClick(evt){
     
     let tel = target.href.slice(4).trim().replace(/[^0-9()+*]/g, "");
     if(tel != ""){
-      let x = confirm("Möchten Sie die Telefonnummer " + tel + " anrufen?")
+      let x = confirm( browser.i18n.getMessage("pop_askNumberText_Number", [tel]) )
       if(x == true){        
         browser.runtime.sendMessage({
           "Call_Number": tel

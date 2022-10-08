@@ -225,7 +225,7 @@
     },
     
     "CallMon_alt": {
-        "message": "Sie sollten evtl. Ihre 'CallMonitor.py'-Datei erneuern\n\nBenötigte Version: $erwartete_version$\nIn Benutzung: $benutzte_version$",
+        "message": "Du solltest evtl. die 'CallMonitor.py'-Datei erneuern\n\nBenötigte Version: $erwartete_version$\nIn Benutzung: $benutzte_version$",
         "description": "",
         "placeholders": {
             "erwartete_version" : {
