@@ -15,14 +15,14 @@ body{
 <a href="#fritzbox">FritzBox</a>
 <a href="#windows">Windows</a>
 <a href="#linux">Linux</a>
-</br>
-</br>
-</br>
+<br>
+<br>
+<br>
 <img src="py_fehler.png"> 
-bedeutet, dass irgend etwas mit CallMonitor nicht stimmt. Der Fehlerbereich kann von der PY-Datei bis hin zu Einstellung der FritzBox sein. </br>
+bedeutet, dass irgend etwas mit CallMonitor nicht stimmt. Der Fehlerbereich kann von der PY-Datei bis hin zu Einstellung der FritzBox sein. <br>
 Führe in den Einstellungen den Python-Test durch, um genauere Informationen zu erhalten.
-</br>
-</br>
+<br>
+<br>
 <h1 id="fritzbox">FritzBox</h1>
 Bei der FritzBox müssen noch einige Vorkehrungen getroffen werden:
 <ul type="disc">
@@ -31,68 +31,68 @@ Bei der FritzBox müssen noch einige Vorkehrungen getroffen werden:
         <li>Es wird ein Benutzerkonto benötigt, welches auf die Anrufliste Zugriff hat (s. <a href="https://avm.de/service/fritzbox/fritzbox-7270/wissensdatenbank/publication/show/1522_Im-Heimnetz-uber-Benutzerkonten-auf-FRITZ-Box-zugreifen" target="_blank" rel="noreferrer noopener">hier</a>)
         <li>Damit das Addon mit der FritzBox interagieren kann, muss TR-064 aktiviert sein (s. <a href="https://avm.de/service/wissensdatenbank/dok/FRITZ-Box-7590/3266_MyFRITZ-App-fur-Android-einrichten/" target="_blank" rel="noreferrer noopener">hier</a> unter den Punkt "FRITZ!Box für Zugriff von Anwendungen einrichten")
     </ul>
-    </br>
+    <br>
     <li>Für den CallMonitor muss der Port 1012 von der FritzBox freigeschaltet werden. Das kann man durch anwählen der Nummer #96*5* mittles Telefon erreichen. Mit der Nummer #96*4* lässt sich dies wieder sperren.
-    </br></br>
+    <br><br>
     <li>Um mit dem Addon Nummer anwählen zu können, muss die Wahlhilfe aktiviert sein (s. <a href="https://service.avm.de/help/de/FRITZ-Box-Fon-WLAN-7490/017p1/hilfe_fon_waehlhilfe" target="_blank" rel="noreferrer noopener">hier</a>)
 </ul>
-</br>
+<br>
 <h1 id="windows">Windows</h1>
-Lade in den Einstellungen die Zip-Datei herunter, indem du auf "Dateien downloaden" klickst.</br>
-Entpacke die Zip-Datei an einem Ort deiner Wahl.</br>
-Am besten ist, man lässt alle Dateien in dem einen Ordner. Andernfalls muss man in den Dateien</br>
-die Pfade dementsprechend anpassen (unterschiedliche Schreibweise beachten).</br>
-</br>
-Die Kaskade läuft folgendermaßen ab:</br>
-Firefox ⇒ Registry ⇒ JSON-Datei ⇒ BAT-Datei ⇒ PY-Datei bzw.</br>
-Firefox ⇒ Registry ⇒ CallMonitor.json ⇒ CallMonitor_win.bat ⇒ CallMonitor.py</br>
-</br>
+Lade in den Einstellungen die Zip-Datei herunter, indem du auf "Dateien downloaden" klickst.<br>
+Entpacke die Zip-Datei an einem Ort deiner Wahl.<br>
+Am besten ist, man lässt alle Dateien in dem einen Ordner. Andernfalls muss man in den Dateien<br>
+die Pfade dementsprechend anpassen (unterschiedliche Schreibweise beachten).<br>
+<br>
+Die Kaskade läuft folgendermaßen ab:<br>
+Firefox ⇒ Registry ⇒ JSON-Datei ⇒ BAT-Datei ⇒ PY-Datei bzw.<br>
+Firefox ⇒ Registry ⇒ CallMonitor.json ⇒ CallMonitor_win.bat ⇒ CallMonitor.py<br>
+<br>
 Weitere Infos findest du hier: <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#windows" target="_blank" rel="noreferrer noopener">Native_manifests</a>
-</br>
-</br>
-In dem Ordner befindet sich eine Datei namens "RegGenerator.vbs". Diese Datei erstellt eine Datei </br>
-namens "link.reg". Wenn man diese Reg-Datei dann ausführt, setzt sie ein Verweis zu der </br>
-CallMonitor.json-Datei, damit Firefox zum arbeiten weiß, wo die Datei ist. Daher ist es wichtig, dass</br>
-sich die VBS-Datei im selben Ordner wie die JSON-Datei befinden, bevor man sie ausführt.</br>
-</br>
-<u>Zusammenfassung:</u></br>
+<br>
+<br>
+In dem Ordner befindet sich eine Datei namens "RegGenerator.vbs". Diese Datei erstellt eine Datei <br>
+namens "link.reg". Wenn man diese Reg-Datei dann ausführt, setzt sie ein Verweis zu der <br>
+CallMonitor.json-Datei, damit Firefox zum arbeiten weiß, wo die Datei ist. Daher ist es wichtig, dass<br>
+sich die VBS-Datei im selben Ordner wie die JSON-Datei befinden, bevor man sie ausführt.<br>
+<br>
+<u>Zusammenfassung:</u><br>
 <ul>
     <li>VBS-Datei im gleichen Ordner wie die JSON-Datei
     <li>VBS-Datei ausführen ⇒ Reg-Datei erhalten
     <li>Reg-Datei ausführen ⇒ Ein Verweis zu CallMonitor.json gesetzt
 </ul>
-</br>
-</br>
-Mit der Datei "CallMonitor_win.bat" kann man schauen, ob sich die PY-Datei ausführen lässt.</br>
-Im Normalfall sollte nun im Fenster "Python started" stehen.</br>
-</br>
-Sollte stattdessen eine Meldung erscheinen, "Der Befehl "python" ist entweder falsch geschrieben [...]" oder Python was not found; run without arguments [...] muss in der</br>
+<br>
+<br>
+Mit der Datei "CallMonitor_win.bat" kann man schauen, ob sich die PY-Datei ausführen lässt.<br>
+Im Normalfall sollte nun im Fenster "Python started" stehen.<br>
+<br>
+Sollte stattdessen eine Meldung erscheinen, "Der Befehl "python" ist entweder falsch geschrieben [...]" oder Python was not found; run without arguments [...] muss in der<br>
 Umgebungsvariable noch der Pfad zur python.exe eingetragen werden. Um Konflikte zu vermeiden, sollte man diesen Pfad möglichst an erste Stelle setzen. Eine Benutzervariable sollte ausreichen. Anschließend sollte auch der Browser
-neu gestartet werden, um die Änderung zu übernehmen.</br>
+neu gestartet werden, um die Änderung zu übernehmen.<br>
 Alternatiev kann man die Datei "set_python_path.bat" ausführen, die dann die Umgebungsvariable setzt.
-</br>
-</br>
-</br>
+<br>
+<br>
+<br>
 
 <h1 id="linux">Linux</h1>
-Lade in den Einstellungen die Zip-Datei herunter, indem du auf "Dateien downloaden" klickst.</br>
-Entpacke die Zip-Datei in den Ordner ~/.mozilla/native-messaging-hosts/</br>
-</br>
-Die Kaskade läuft folgendermaßen ab:</br>
-Firefox ⇒ JSON-Datei ⇒ PY-Datei bzw.</br>
-Firefox ⇒ CallMonitor.json ⇒ CallMonitor.py</br>
-</br>
+Lade in den Einstellungen die Zip-Datei herunter, indem du auf "Dateien downloaden" klickst.<br>
+Entpacke die Zip-Datei in den Ordner ~/.mozilla/native-messaging-hosts/<br>
+<br>
+Die Kaskade läuft folgendermaßen ab:<br>
+Firefox ⇒ JSON-Datei ⇒ PY-Datei bzw.<br>
+Firefox ⇒ CallMonitor.json ⇒ CallMonitor.py<br>
+<br>
 Weitere Infos findest du hier: <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#linux" target="_blank" rel="noreferrer noopener">Native_manifests</a>
-</br>
-</br>
-Nun müssen noch ein paar Anpassungen bei den neuen Dateien vorgenommen werden:</br>
-Gehe dazu in das Verzeichnis ~/.mozilla/native-messaging-hosts/</br>
+<br>
+<br>
+Nun müssen noch ein paar Anpassungen bei den neuen Dateien vorgenommen werden:<br>
+Gehe dazu in das Verzeichnis ~/.mozilla/native-messaging-hosts/<br>
 Die Anpassungen kann die "fix.sh" Datei erledigen, in dem man sie ausführt oder man macht es eigenständig.
 In der Datei "CallMonitor.json" muss bei "path" der absolute Pfad zur "CallMonitor.py" angegeben werden. (Ersetze das ~ durch den Home-Pfad, wenn diese im gleichen Ordern wie die "CallMonitor.json" ist)
-Die "CallMonitor.py" muss ausführbar gemacht werden (sofern sie es nicht bereits ist).</br>
+Die "CallMonitor.py" muss ausführbar gemacht werden (sofern sie es nicht bereits ist).<br>
 </ul>
-</br>
-<u>Zusammenfassung:</u></br>
+<br>
+<u>Zusammenfassung:</u><br>
 <ul type="circle">
     <li>"fix.sh" ausführen oder
 </ul> 
@@ -100,19 +100,19 @@ Die "CallMonitor.py" muss ausführbar gemacht werden (sofern sie es nicht bereit
     <li>Im "CallMonitor.json" unter "path" den absoluten Pfad zur "CallMonitor.py" Datei setzen
     <li>"CallMonitor.py" muss ausführbar sein
 </ul>
-</br>
-</br>
+<br>
+<br>
 
-Um zu prüfen, ob die PY-Datei funktioniert, reicht es, wenn man diese im Terminal ausführt.</br>
-Im Normalfall sollte nun im Fenster "Python started" stehen.</br>
+Um zu prüfen, ob die PY-Datei funktioniert, reicht es, wenn man diese im Terminal ausführt.<br>
+Im Normalfall sollte nun im Fenster "Python started" stehen.<br>
 <p>
-    </br>
+    <br>
 </p>
 <p>
-    </br>
+    <br>
 </p>
 <p>
-    </br>
+    <br>
 </p>
 </body>
 </html>
