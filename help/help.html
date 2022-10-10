@@ -15,15 +15,21 @@ body{
 <a href="#fritzbox">FritzBox</a>
 <a href="#windows">Windows</a>
 <a href="#linux">Linux</a>
-
-
+<br>
+<br>
+<br>
+<img src="py_fehler.png">
+means that an error has occurred in CallMonitor. The error range can be from the PY file to the setting of the FritzBox.<br>
+Run the python test in the settings to get more informations.
+<br>
+<br>
 <h1 id="fritzbox">FritzBox</h1>
 First of all, some preparations have to be taken on the FritzBox:
 <ul type="disc">
     <li>To view the call log, the following is needed:
     <ul type="circle">
         <li>A user account is needed, which has access to the call list (see <a href="https://en.avm.de/service/knowledge-base/dok/FRITZ-Box-7590-AX/1522_Accessing-FRITZ-Box-from-the-home-network-with-user-accounts/" target="_blank" rel="noreferrer noopener">here</a>)
-        <li>Access for applications via TR-064 must be allowed.
+        <li>In order for the addon to be able to interact with the FritzBox, TR-064 must be activated (see <a href="https://avm.de/service/wissensdatenbank/dok/FRITZ-Box-7590/3266_MyFRITZ-App-fur-Android-einrichten/" target="_blank" rel="noreferrer noopener">here</a> at "FRITZ!Box für Zugriff von Anwendungen einrichten")
     </ul>
     <br>
     <li>For the CallMonitor, the port 1012 must be enabled on the FritzBox. This can be done by dialing #96*5* by phone. With the number #96*4* you can block it again.
