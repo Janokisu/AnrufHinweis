@@ -48,6 +48,7 @@ Um über ankommende Anrufe benachrichtigt zu werden, ist Python auf dem PC erfor
 - Tel-Links können nun benutzt werden (https://github.com/Janokisu/AnrufHinweis/issues/4)
 - Anrufliste und Telefonbuch können durchsucht werden
 - Verbindungstest und Aufbau mit CallMonitor sowie dessen Zustandsanzeige geht jetzt schneller durch
+- Eingehender Anruf wird angezeigt
 - Kleinigkeiten verbessert
 
 <h5>0.1.2</h5>
