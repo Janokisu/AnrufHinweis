@@ -32,9 +32,9 @@ Bei der FritzBox müssen noch einige Vorkehrungen getroffen werden:
         <li>Damit das Addon mit der FritzBox interagieren kann, muss TR-064 aktiviert sein (s. <a href="https://avm.de/service/wissensdatenbank/dok/FRITZ-Box-7590/3266_MyFRITZ-App-fur-Android-einrichten/" target="_blank" rel="noreferrer noopener">hier</a> unter den Punkt "FRITZ!Box für Zugriff von Anwendungen einrichten")
     </ul>
     <br>
-    <li>Für den CallMonitor muss der Port 1012 von der FritzBox freigeschaltet werden. Das kann man durch anwählen der Nummer #96*5* mittles Telefon erreichen. Mit der Nummer #96*4* lässt sich dies wieder sperren.
+    <li>Für den CallMonitor muss der Port 1012 von der FritzBox freigeschaltet werden. Das kann man durch Anwählen der Nummer #96*5* mittles Telefon erreichen. Mit der Nummer #96*4* lässt sich dies wieder sperren.
     <br><br>
-    <li>Um mit dem Addon Nummer anwählen zu können, muss die Wahlhilfe aktiviert sein (s. <a href="https://service.avm.de/help/de/FRITZ-Box-Fon-WLAN-7490/017p1/hilfe_fon_waehlhilfe" target="_blank" rel="noreferrer noopener">hier</a>)
+    <li>Um mit dem Addon Nummern anwählen zu können, muss die Wahlhilfe aktiviert sein (s. <a href="https://service.avm.de/help/de/FRITZ-Box-Fon-WLAN-7490/017p1/hilfe_fon_waehlhilfe" target="_blank" rel="noreferrer noopener">hier</a>)
 </ul>
 <br>
 <h1 id="windows">Windows</h1>
@@ -50,26 +50,26 @@ Firefox ⇒ Registry ⇒ CallMonitor.json ⇒ CallMonitor_win.bat ⇒ CallMonito
 Weitere Infos findest du hier: <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#windows" target="_blank" rel="noreferrer noopener">Native_manifests</a>
 <br>
 <br>
-In dem Ordner befindet sich eine Datei namens "RegGenerator.vbs". Diese Datei erstellt eine Datei <br>
-namens "link.reg". Wenn man diese Reg-Datei dann ausführt, setzt sie ein Verweis zu der <br>
-CallMonitor.json-Datei, damit Firefox zum arbeiten weiß, wo die Datei ist. Daher ist es wichtig, dass<br>
+In dem Ordner befindet sich eine Datei namens "RegGenerator.vbs". Dieses Script erstellt eine Datei <br>
+namens "link.reg". Wenn man diese Reg-Datei dann ausführt, setzt sie einen Verweis zu der <br>
+CallMonitor.json-Datei, damit Firefox weiß, wo die Datei ist und diese verwenden kann. Daher ist es wichtig, dass<br>
 sich die VBS-Datei im selben Ordner wie die JSON-Datei befinden, bevor man sie ausführt.<br>
 <br>
 <u>Zusammenfassung:</u><br>
 <ul>
-    <li>VBS-Datei im gleichen Ordner wie die JSON-Datei
+    <li>VBS-Datei muss sich im gleichen Ordner wie die JSON-Datei befinden
     <li>VBS-Datei ausführen ⇒ Reg-Datei erhalten
-    <li>Reg-Datei ausführen ⇒ Ein Verweis zu CallMonitor.json gesetzt
+    <li>Reg-Datei ausführen ⇒ Ein Verweis zu CallMonitor.json wird gesetzt
 </ul>
 <br>
 <br>
 Mit der Datei "CallMonitor_win.bat" kann man schauen, ob sich die PY-Datei ausführen lässt.<br>
 Im Normalfall sollte nun im Fenster "Python started" stehen.<br>
 <br>
-Sollte stattdessen eine Meldung erscheinen, "Der Befehl "python" ist entweder falsch geschrieben [...]" oder Python was not found; run without arguments [...] muss in der<br>
+Sollte stattdessen eine Meldung erscheinen wie "Der Befehl "python" ist entweder falsch geschrieben [...]" oder "Python was not found; run without arguments [...]", muss in der<br>
 Umgebungsvariable noch der Pfad zur python.exe eingetragen werden. Um Konflikte zu vermeiden, sollte man diesen Pfad möglichst an erste Stelle setzen. Eine Benutzervariable sollte ausreichen. Anschließend sollte auch der Browser
 neu gestartet werden, um die Änderung zu übernehmen.<br>
-Alternatiev kann man die Datei "set_python_path.bat" ausführen, die dann die Umgebungsvariable setzt.
+Alternativ kann man die Datei "set_python_path.bat" ausführen, die dann die Umgebungsvariable setzt.
 <br>
 <br>
 <br>
@@ -87,9 +87,9 @@ Weitere Infos findest du hier: <a href="https://developer.mozilla.org/en-US/docs
 <br>
 Nun müssen noch ein paar Anpassungen bei den neuen Dateien vorgenommen werden:<br>
 Gehe dazu in das Verzeichnis ~/.mozilla/native-messaging-hosts/<br>
-Die Anpassungen kann die "fix.sh" Datei erledigen, in dem man sie ausführt oder man macht es eigenständig.
-In der Datei "CallMonitor.json" muss bei "path" der absolute Pfad zur "CallMonitor.py" angegeben werden. (Ersetze das ~ durch den Home-Pfad, wenn diese im gleichen Ordern wie die "CallMonitor.json" ist)
-Die "CallMonitor.py" muss ausführbar gemacht werden (sofern sie es nicht bereits ist).<br>
+Die Anpassungen kann die "fix.sh" Datei erledigen, indem man sie ausführt.<br><br>
+Wenn du die Anpassungen manuell vornehmen möchtest: In der Datei "CallMonitor.json" muss bei "path" der absolute Pfad zur "CallMonitor.py" angegeben werden. (Ersetze das ~ durch den Home-Pfad, wenn diese im gleichen Ordern wie die "CallMonitor.json" ist)<br>
+Außerdem muss die Datei "CallMonitor.py" ausführbar gemacht werden (sofern sie es nicht bereits ist).<br>
 </ul>
 <br>
 <u>Zusammenfassung:</u><br>
