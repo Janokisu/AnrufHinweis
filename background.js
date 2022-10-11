@@ -403,6 +403,8 @@ function work(info){
                 //note(wer + " ruft" + extra + " an");
                 note( browser.i18n.getMessage("ring_text", [wer, extra]) );
                 ruf(true);
+                Listener_Dial = [2, info[4]];
+                blink_connecting("on", 2);
             }
         break;
         
@@ -627,7 +629,7 @@ function callNumber(number, sendResponse){
 	}).then(function(){
 		console.info("Calling number: " + number);
 		Listener_Dial = [0, number];
-		blink_connecting("on");
+		blink_connecting("on", 1);
 		
 		if(GL_PythonListen.isRunning() == false){
 			//console.log("set Time connectingStopped");
@@ -733,10 +735,14 @@ function blink_missed(x){
 
 let blink_connecting_toggle = 0;
 let blink_connecting_interval = 0;
-function blink_connecting(x){
-    
+function blink_connecting(x, out_in){
+  //out_in 1=du rufst an; 2=du wirst angerufen
+  
     if(blink_connecting_toggle){
-        browser.browserAction.setBadgeBackgroundColor({color: "#00CC00"});
+        if(out_in == 1) browser.browserAction.setBadgeBackgroundColor({color: "#00CC00"});
+        else if(out_in == 2) browser.browserAction.setBadgeBackgroundColor({color: "#0000CC"});
+        console.info("out_in", out_in)
+        
 		browser.browserAction.setBadgeText({text: "📞"});
         blink_connecting_toggle = 0;
     }
@@ -748,9 +754,10 @@ function blink_connecting(x){
     
     if(x != ""){
         if(x == "on"){
+        
             clearInterval(blink_connecting_interval);
             blink_connecting_interval = setInterval(() => {
-                blink_connecting();
+                blink_connecting("", out_in);
             }, 1000);
         }
         else if(x == "off"){

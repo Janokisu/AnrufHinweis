@@ -197,7 +197,7 @@
     },
 
     "test_CallMon": {
-        "message": "Testing CallMon",
+        "message": "Testing CallMonitor",
         "description": ""
     },
 
@@ -360,7 +360,7 @@
         }
     },
 
-    "pop_callingNumberText_Number": {
+    "pop_callingNumberText_Number_out": {
         "message": "Calling number $number$",
         "description": "",
         "placeholders": {
@@ -370,8 +370,31 @@
         }
     },
 
-    "pop_callingNumberText_Name": {
+    "pop_callingNumberText_Name_out": {
         "message": "Calling '$name$' ($number$)",
+        "description": "",
+        "placeholders": {
+            "number" : {
+                "content" : "$1"
+            },
+            "name" : {
+                "content" : "$2"
+            }
+        }
+    },
+
+    "pop_callingNumberText_Number_in": {
+        "message": "Number $number$ is calling",
+        "description": "",
+        "placeholders": {
+            "number" : {
+                "content" : "$1"
+            }
+        }
+    },
+
+    "pop_callingNumberText_Name_in": {
+        "message": "'$name$' ($number$) is calling",
         "description": "",
         "placeholders": {
             "number" : {

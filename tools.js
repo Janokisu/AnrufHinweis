@@ -181,9 +181,10 @@ class PythonListen{
   #port = null;
   #state = 0;
   #running = false;
+  #thisTimeout = 0;
   
-  #PyVer = 0;
-  #CallMonVer = 0
+  #PyVer = "?.?";
+  #CallMonVer = "?.?";
    
   
   isRunning(){
@@ -245,6 +246,17 @@ class PythonListen{
   start(){
     if(this.connect() == true){
       if(this.send("version") == true){
+        
+        const self = this; //Bezug herstellen
+        this.#thisTimeout = setTimeout(() => {
+          //es dauert aufällig lange. evtl noch ne alte Version
+          self.errorEvent({
+            "state": 0,
+            "code": 0,
+            "message": "\n" + browser.i18n.getMessage("CallMon_alt", [CallMon_Version, self.getCallMonVer()])
+          });
+        }, 5*1000);
+        
         return true;
       } 
       else{
@@ -300,6 +312,7 @@ class PythonListen{
       break;
       
       case "state":
+        clearTimeout(self.#thisTimeout);
         if(info[1]) self.#state = Number(info[1]);
         self.statechange(self.#state);
       break;

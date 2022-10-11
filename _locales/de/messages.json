@@ -197,7 +197,7 @@
     },
     
     "test_CallMon": {
-        "message": "Teste CallMon",
+        "message": "Teste CallMonitor",
         "description": ""
     },
     
@@ -360,7 +360,7 @@
         }
     },
 	
-	"pop_callingNumberText_Number": {
+	"pop_callingNumberText_Number_out": {
         "message": "Nummer $number$ wird angerufen",
         "description": "",
         "placeholders": {
@@ -370,7 +370,7 @@
         }
     },
     
-    "pop_callingNumberText_Name": {
+    "pop_callingNumberText_Name_out": {
         "message": "'$name$' ($number$) wird angerufen",
         "description": "",
         "placeholders": {
@@ -382,6 +382,30 @@
             }
         }
     },
+    
+    "pop_callingNumberText_Number_in": {
+        "message": "Nummer $number$ ruft dich an",
+        "description": "",
+        "placeholders": {
+            "number" : {
+                "content" : "$1"
+            }
+        }
+    },
+    
+    "pop_callingNumberText_Name_in": {
+        "message": "'$name$' ($number$) ruft dich an",
+        "description": "",
+        "placeholders": {
+            "number" : {
+                "content" : "$1"
+            },
+			"name" : {
+                "content" : "$2"
+            }
+        }
+    },
+    
     
     "pop_connectingNumberText_Number": {
         "message": "Verbindung zur Nummer $number$ wird aufgebaut",

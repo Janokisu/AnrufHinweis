@@ -214,6 +214,8 @@ function connecting(obj){
 		return 0;
 	}
 	
+  document.getElementById("callSymbol").style.color = "green";
+  document.getElementById("hangup").style.display = "inline-block";
 	
 	let name = callingName.innerText;
 	let number = callingNumber.innerText;
@@ -247,18 +249,39 @@ function connecting(obj){
 
 let calling_inter;
 function calling(obj){
+  //obj: 1=du rufst an; 2=du wirst angerufen
+  
 	//Es wird gerade jemand angerufen
 	change_Window(1);
 	change_sonder(1);
 	
 	let name = callingName.innerText;
 	let number = callingNumber.innerText;
-	
+  
+  if(obj == 1){
+    document.getElementById("callSymbol").style.color = "green";
+	}
+  else if(obj == 2){
+    document.getElementById("callSymbol").style.color = "blue";
+    document.getElementById("hangup").style.display = "none";
+	}
+  
+  
 	if(callingName.innerText == ""){
-		document.getElementById("callingNumberText").innerText = browser.i18n.getMessage("pop_callingNumberText_Number", [number]);
+		if(obj == 1){
+      document.getElementById("callingNumberText").innerText = browser.i18n.getMessage("pop_callingNumberText_Number_out", [number]);
+    }
+    else if(obj == 2){
+      document.getElementById("callingNumberText").innerText = browser.i18n.getMessage("pop_callingNumberText_Number_in", [number]);
+    }
 	}
 	else{
-		document.getElementById("callingNumberText").innerText = browser.i18n.getMessage("pop_callingNumberText_Name", [number, name]);
+		if(obj == 1){
+      document.getElementById("callingNumberText").innerText = browser.i18n.getMessage("pop_callingNumberText_Name_out", [number, name]);
+    }
+    else if(obj == 2){
+      document.getElementById("callingNumberText").innerText = browser.i18n.getMessage("pop_callingNumberText_Name_in", [number, name]);
+    }
 	}
 	
 	
@@ -356,8 +379,9 @@ function checkCalling(obj){
 		callingName.innerText = obj["Listener_Dial"][2];
 		callingNumber.innerText = obj["Listener_Dial"][1];
 		
-		if(obj["Listener_Dial"][0] == 1) calling();
-		else connecting();
+		if(obj["Listener_Dial"][0] == 0) connecting();
+		else if(obj["Listener_Dial"][0] == 1) calling(1);
+		else if(obj["Listener_Dial"][0] == 2) calling(2);
 	}
 }
 
