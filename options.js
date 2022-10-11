@@ -4,14 +4,8 @@ const orange = "orange";
 const FBox_URL = "http://fritz.box";
 
 const AccessAllWebsitesPermissionRequest = {
-  origins: ["http://*/*","https://*/*"]
+  origins: ["http://*/*","https://*/*","file://*/*"]
 };
-
-//const AccessAllWebsitesPermissionRequest = {
-//  permissions: ["file://*/*"],
-//  origins: ["http://*/*","https://*/*"]
-//};
-//
 
 let GL_alarm;
 let GL_login = false;
