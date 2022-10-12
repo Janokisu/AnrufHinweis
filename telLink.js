@@ -23,7 +23,7 @@ function telLinkClick(evt){
 
 browser.runtime.onMessage.addListener(function (request, sender, sendResponse){
   //console.log("rec", request)
-  if ( request.hasOwnProperty("telLink_func_destroy") ) {
+  if( request.hasOwnProperty("telLink_func_destroy") ){
     document.removeEventListener("click", telLinkClick);
   }
 });

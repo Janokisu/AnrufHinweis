@@ -1,51 +1,51 @@
 {
-    "description": "__MSG_extensionDescription__",
-    "manifest_version": 2,
-    "name": "__MSG_extensionName__",
-    "version": "0.2.0",
-    "default_locale": "en",
-    "icons": {
-        "48": "icons/telefonliste.svg"
-    },
+  "description": "__MSG_extensionDescription__",
+  "manifest_version": 2,
+  "name": "__MSG_extensionName__",
+  "version": "0.2.0",
+  "default_locale": "en",
+  "icons": {
+    "48": "icons/telefonliste.svg"
+  },
 
-    "applications": {
-        "gecko": {
-            "id": "{259559e5-2391-4a38-aa74-a19e732c84e8}",
-            "strict_min_version": "77.0"
-        }
-    },
+  "applications": {
+    "gecko": {
+      "id": "{259559e5-2391-4a38-aa74-a19e732c84e8}",
+      "strict_min_version": "77.0"
+    }
+  },
 
-    "background": {
-        "scripts": [
-           "tools.js",
-           "background.js"
-        ]
-    },
-
-    "options_ui": {
-        "browser_style": true,
-        "page": "options.html"
-    },
-
-    "browser_action": {
-        "browser_style": true,
-        "default_popup": "popup.html",
-        "default_icon": "icons/telefonliste.svg"
-    },
-
-    "permissions": [
-        "storage",
-        "http://fritz.box/*",
-        "https://fritz.box/*",
-        "menus"
-    ],
-    
-    "optional_permissions": [
-        "nativeMessaging",
-        "notifications",
-        "http://*/*",
-        "https://*/*",
-        "file://*/*"
+  "background": {
+    "scripts": [
+      "tools.js",
+      "background.js"
     ]
+  },
+
+  "options_ui": {
+    "browser_style": true,
+    "page": "options.html"
+  },
+
+  "browser_action": {
+    "browser_style": true,
+    "default_popup": "popup.html",
+    "default_icon": "icons/telefonliste.svg"
+  },
+
+  "permissions": [
+    "storage",
+    "http://fritz.box/*",
+    "https://fritz.box/*",
+    "menus"
+  ],
+  
+  "optional_permissions": [
+    "nativeMessaging",
+    "notifications",
+    "http://*/*",
+    "https://*/*",
+    "file://*/*"
+  ]
 
 }
