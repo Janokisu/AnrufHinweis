@@ -583,82 +583,86 @@ let Listener_SelectionNumber = "";
 browser.runtime.onMessage.addListener(function (request, sender, sendResponse){
   //console.log("request",request)
   
-  if ( request.hasOwnProperty("settings_change") ) {
-    settings_changed();
-  }
+  switch(true){
   
-  /*
-  if ( request.hasOwnProperty("python erreichbar") ) {
-     CallMonitor_connnect();
-  }
-  */
-  if( request.hasOwnProperty("callListTransfer") ){
-    blink_missed("off");
-    sendResponse({
-      callList: GL_call_list_popup,
-      callList_raw: GL_call_list_popup_raw
-    });
-  }
-  
-  if( request.hasOwnProperty("phoneListTransfer") ){
-    sendResponse({
-      phoneList: GL_phone_list_popup,
-      phoneList_raw: GL_phone_list_popup_raw
-    });
-  }
-  
-  if ( request.hasOwnProperty("call_test") ) {
-    let info = request["call_test"].split(";")
-    //console.warn(info);
-    work(info);
-  }
-  
-  if ( request.hasOwnProperty("Call_Number") ) {
-    //Nummer anrufen
-    callNumber( request["Call_Number"], sendResponse );
-    callNumber_check = true;
+    case request.settings_change:
+      settings_changed();
+    break;
     
-    //wenn nach 3 sek callNumber_check noch true ist, ist alles gut. Anstonsten gabe es probleme 
-    setTimeout(() => {
-      if(callNumber_check == true){
-        startGetDialConfig();
+    /*
+    case request.python_erreichbar:
+       CallMonitor_connnect();
+    break;
+    */
+    
+    case request.callListTransfer:
+      blink_missed("off");
+      sendResponse({
+        callList: GL_call_list_popup,
+        callList_raw: GL_call_list_popup_raw
+      });
+    break;
+    
+    case request.phoneListTransfer:
+      sendResponse({
+        phoneList: GL_phone_list_popup,
+        phoneList_raw: GL_phone_list_popup_raw
+      });
+    break;
+    
+    case request.call_test:
+      let info = request["call_test"].split(";")
+      //console.warn(info);
+      work(info);
+    break;
+    
+    case request.Call_Number:
+      //Nummer anrufen
+      callNumber( request["Call_Number"], sendResponse );
+      callNumber_check = true;
+      
+      //wenn nach 3 sek callNumber_check noch true ist, ist alles gut. Anstonsten gabe es probleme 
+      setTimeout(() => {
+        if(callNumber_check == true){
+          startGetDialConfig();
+        }
+      }, 3000);
+    break;
+    
+    case request.HangUp:
+      hangup(sendResponse);
+    break;
+    
+    case request.checkCalling:
+      if(Listener_Dial == ""){
+        sendResponse({
+          "Listener_Dial": ""
+        });
       }
-    }, 3000);
-  }
-  
-  if( request.hasOwnProperty("HangUp") ){
-    hangup(sendResponse);
-  }
-  
-  if( request.hasOwnProperty("checkCalling") ){
-    if(Listener_Dial == ""){
-      sendResponse({
-        "Listener_Dial": ""
-      });
-    }
-    else{
-      sendResponse({
-        "Listener_Dial": Listener_Dial.concat( returnNumberName(Listener_Dial[1]) )
-      });
-    }
-  }
-  
-  if( request.hasOwnProperty("checkSelectionNumber") ){  
-    sendResponse({
-      "callSelectionNumber": [Listener_SelectionNumber, returnNumberName(Listener_SelectionNumber)]
-    });
+      else{
+        sendResponse({
+          "Listener_Dial": Listener_Dial.concat( returnNumberName(Listener_Dial[1]) )
+        });
+      }
+    break;
     
-    Listener_SelectionNumber = "";
-  }
-  
-  if( request.hasOwnProperty("refresh_phonebook") ){
-    phoneList_start();
-  }
-  
-  if( request.hasOwnProperty("checkPython") ){
-    sendResponse({
-      "pythonCheck": GL_PythonListen.isRunning()
-    });
+    case request.checkSelectionNumber:
+      sendResponse({
+        "callSelectionNumber": [Listener_SelectionNumber, returnNumberName(Listener_SelectionNumber)]
+      });
+      
+      Listener_SelectionNumber = "";
+    break;
+    
+    case request.refresh_phonebook:
+      phoneList_start();
+    break;
+    
+    case request.checkPython:
+      sendResponse({
+        "pythonCheck": GL_PythonListen.isRunning()
+      });
+    break;
   }
 })
 

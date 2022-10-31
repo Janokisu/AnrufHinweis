@@ -620,7 +620,7 @@ save_button.addEventListener("click", function(){
   );
   */
   
-   GL_accessAllWebsitesPermission[0] != check_url_Fbox();
+   GL_accessAllWebsitesPermission[0] = !check_url_Fbox();
    GL_accessAllWebsitesPermission[1] = check_tel_link.checked;
   accessAllWebsites(-1);
   
@@ -768,7 +768,7 @@ function init(x){
     change_volume(tmp);
     
     //Rechte für alle Seiten entfernen, wenn es nicht mehr gebruacht wird
-    GL_accessAllWebsitesPermission[0] != check_url_Fbox();
+    GL_accessAllWebsitesPermission[0] = !check_url_Fbox();
     GL_accessAllWebsitesPermission[1] = check_tel_link.checked;
     accessAllWebsites(-1);
   }

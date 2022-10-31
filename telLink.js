@@ -1,32 +1,56 @@
-function telLinkClick(evt){
-  let target = evt.target
+try{
+  //try - beim 1. mal gibt es varListen noch nicht. wenn executeScript erneut ausgeführt wird, wird das Skript fortlaufend unten angehängt
+  browser.runtime.onMessage.removeListener(varListen); //vorherige Listener löschen
+}
+catch(e){}
+
+
+controller = new AbortController();
+
+varTelLinkClick = function telLinkClick(evt){
   
-  if(target.tagName == "A" && target.protocol == "tel:"){
-    
-    evt.preventDefault(); //Linkausführung verhindern
-    
-    
-    let tel = target.href.slice(4).trim().replace(/[^0-9()+*]/g, "");
-    if(tel != ""){
-      let x = confirm( browser.i18n.getMessage("pop_askNumberText_Number", [tel]) )
-      if(x == true){        
-        browser.runtime.sendMessage({
-          "Call_Number": tel
-        });
-      }
+  evt.preventDefault(); //Linkausführung verhindern
+  
+  
+  let tel = this.href.replace(/[^0-9()+*]/g, "");
+  if(tel != ""){
+    let x = confirm( browser.i18n.getMessage("pop_askNumberText_Number", [tel]) )
+    if(x == true){        
+      browser.runtime.sendMessage({
+        "Call_Number": tel
+      });
     }
-    
   }
   
 }
 
 
-browser.runtime.onMessage.addListener(function (request, sender, sendResponse){
+varListen = function (request, sender, sendResponse){
   //console.log("rec", request)
   if( request.hasOwnProperty("telLink_func_destroy") ){
-    document.removeEventListener("click", telLinkClick);
+    //document.removeEventListener("click", varTelLinkClick);
+    controller.abort(); // entfernt alle Listener vom Addon auf der Seite
   }
-});
+}
 
-document.removeEventListener("click", telLinkClick); //falls noch alter listerner da war
-document.addEventListener("click", telLinkClick);
+
+
+
+for(tagName of document.getElementsByTagName("a")){
+  if(tagName.protocol == "tel:"){
+    console.log(tagName)
+    
+    tagName.addEventListener("click", varTelLinkClick, { signal: controller.signal });
+  }
+}
+
+browser.runtime.onMessage.addListener(varListen);
+
+
+
+
+
+
+
+
+
