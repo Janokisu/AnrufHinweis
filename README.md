@@ -5,7 +5,7 @@ Mit dem Add-on kann man über die Fritz!Box
 <ul>
   <li>über ankommende Anrufe benachrichtigen und/oder signalisieren lassen.</li>
   <li>Anrufe und Telefonbuch anzeigen lassen.</li>
-  <li>anrufe starten. Auch von Seiten heraus, in dem man die Telefonnummer markiert und dann das Kontextmenü öffnet.</li>
+  <li>Anrufe starten. Auch von Seiten heraus, in dem man den Tel-Link anklickt oder die Telefonnummer markiert und dann das Kontextmenü öffnet.</li>
 </ul>
 
 <p>
@@ -42,6 +42,11 @@ Um über ankommende Anrufe benachrichtigt zu werden, ist Python auf dem PC erfor
 </br>
 <h4>Changelog:</h4>
 
+<h5>0.2.1</h5>
+
+- Jetzt sollte die Tel-Link-Funktion auf allen Webseiten funktionieren (https://github.com/Janokisu/AnrufHinweis/issues/8)
+- Fix: beim PC-Start kam u. U. die Fehlermeldung, dass die Python-Konfiguration fehlerhaft sei
+
 <h5>0.2.0</h5>
 
 - Hilfe-Seite (https://github.com/Janokisu/AnrufHinweis/issues/2) und den Link dazu bearbeitet (der Link ist jetzt ein ?-Symbol)
@@ -57,7 +62,7 @@ Um über ankommende Anrufe benachrichtigt zu werden, ist Python auf dem PC erfor
 
 <h5>0.1.1</h5>
 
-- Firefox konnte nicht mit dem Python-Script kommunizieren</br>
+- Firefox konnte nicht mit dem Python-Skript kommunizieren</br>
 - Hinweissymbol blinkte bei jeden verpassten Anruf schneller</br>
 
 <h5>0.1.0</h5>
