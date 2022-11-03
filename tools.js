@@ -271,19 +271,29 @@ class PythonListen{
     return ok;
   }
   
-  start(){
+  start(x){
     if(this.connect() == true){
       if(this.send("version") == true){
       
         const self = this; //Bezug herstellen
+        
+        let sek = 1;
+        if(x == "autostart"){
+          sek = 10;
+        }
+        
         this.#thisTimeout = setTimeout(() => {
+          
           //es dauert aufällig lange. evtl noch ne alte Version
           self.errorEvent({
           "state": 0,
           "code": 0,
           "message": "\n" + browser.i18n.getMessage("CallMon_alt", [CallMon_Version, self.getCallMonVer()])
           });
-        }, 2*1000);
+          
+          self.stop();
+          
+        }, sek*1000);
       
         return true;
       }

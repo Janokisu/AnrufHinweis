@@ -381,7 +381,7 @@ function CallMonitor_connnect(){
   
   GL_PythonListen.stop();
   
-  GL_PythonListen.start();
+  GL_PythonListen.start("autostart");
 
 
   let FBox = GL_Fritz_URL.split("//")[1];
