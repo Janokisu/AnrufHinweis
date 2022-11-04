@@ -49,7 +49,7 @@ Um über ankommende Anrufe benachrichtigt zu werden, ist Python auf dem PC erfor
 <h5>0.2.1</h5>
 
 - Jetzt sollte die Tel-Link-Funktion auf allen Webseiten funktionieren (https://github.com/Janokisu/AnrufHinweis/issues/8)
-- Fix: beim PC-Start kam u. U. die Fehlermeldung, dass die Python-Konfiguration fehlerhaft sei
+- Fix: beim PC-Start kam u. U. die Fehlermeldung, dass mit der Pythondatei oder der Zuweisung nicht stimme
 
 <h5>0.2.0</h5>
 
