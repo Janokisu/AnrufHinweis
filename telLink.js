@@ -17,7 +17,8 @@ varTelLinkClick = function telLinkClick(evt){
     let x = confirm( browser.i18n.getMessage("pop_askNumberText_Number", [tel]) )
     if(x == true){        
       browser.runtime.sendMessage({
-        "Call_Number": tel
+        "Call_Number": true,
+        "Call_Number_value": tel
       });
     }
   }

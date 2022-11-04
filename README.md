@@ -42,7 +42,7 @@ Um über ankommende Anrufe benachrichtigt zu werden, ist Python auf dem PC erfor
 </br>
 <h4>Changelog:</h4>
 
-<h5>0.2.2</h5>
+<h5>0.2.3</h5>
 
 - Aufgrund eines internen Fehlers ging die Wahlhilfe-Funktion nicht mehr
 

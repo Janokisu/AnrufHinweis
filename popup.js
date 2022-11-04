@@ -196,7 +196,8 @@ document.getElementById("telNumberEnterCall").addEventListener("click", function
   askCallingNumber(nummer)
 
   browser.runtime.sendMessage({
-    "Call_Number": callingNumber.innerText
+    "Call_Number": true,
+    "Call_Number_value": callingNumber.innerText
   })
   .then(connecting, onError);
   
