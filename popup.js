@@ -127,7 +127,8 @@ function askCallingNumber(number, name=""){
 document.getElementById("yes").addEventListener("click", function(x){
   //wenn der Button "yes" geklickt wurde -> wähle die angezeigte Nummer
   browser.runtime.sendMessage({
-    "Call_Number": callingNumber.innerText
+    "Call_Number": true,
+    "Call_Number_value": callingNumber.innerText
   })
   .then(connecting, onError);
 });

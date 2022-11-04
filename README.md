@@ -42,6 +42,10 @@ Um über ankommende Anrufe benachrichtigt zu werden, ist Python auf dem PC erfor
 </br>
 <h4>Changelog:</h4>
 
+<h5>0.2.2</h5>
+
+- Aufgrund eines internen Fehlers ging die Wahlhilfe-Funktion nicht mehr
+
 <h5>0.2.1</h5>
 
 - Jetzt sollte die Tel-Link-Funktion auf allen Webseiten funktionieren (https://github.com/Janokisu/AnrufHinweis/issues/8)

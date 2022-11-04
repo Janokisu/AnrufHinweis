@@ -618,7 +618,7 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse){
     
     case request.Call_Number:
       //Nummer anrufen
-      callNumber( request["Call_Number"], sendResponse );
+      callNumber( request["Call_Number_value"], sendResponse );
       callNumber_check = true;
       
       //wenn nach 3 sek callNumber_check noch true ist, ist alles gut. Anstonsten gabe es probleme 
